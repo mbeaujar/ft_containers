@@ -62,49 +62,63 @@ namespace ft
             typedef ptrdiff_t difference_type;
             typedef Myiterator<value_type> iterator;
 
-            vector(size_type N = 0) { // make exceptions for the case where N is under 0
-                this->arr = new T[N];
-                this->capacity = N;
-                this->current = N;
+            vector() {
+                _arr = _alloc.allocate(1);
+                _capacity = 1;
+                _current = 0;
+            }
+
+            vector(size_type N) { // make exceptions for the case where N is under 0
+                _arr = _alloc.allocate(N);
+                _capacity = N;
+                _current = N;
             };
 
+            vector(size_type N, value_type val) {
+                _arr = _alloc.allocate(N);
+                _capacity = N;
+                _current = N;
+                for (size_type i = 0; i < N; i++)
+                    _arr[i] = val;
+            }
 
             ~vector() {
-                delete [] this->arr;
+               _alloc.deallocate(_arr, _capacity);
             };
 
             T& operator[](size_type idx) {
-                return this->arr[idx];
+                return _arr[idx];
             };
 
             void push_back(T content) {
-                if (this->current == this->capacity) {
-                    T *old = this->arr;
-                    this->arr = new T[this->capacity = this->capacity * 2];
-                    for (size_type i = 0; i < this->current; i++)
-                        this->arr[i] = old[i];
+                if (_current == _capacity) {
+                    T *old = _arr;
+                    _arr = _alloc.allocate(_capacity = _capacity * 2);
+                    for (size_type i = 0; i < _current; i++)
+                        _arr[i] = old[i];
                     delete [] old;
                 }
-                this->arr[this->current++] = content;
+                this->_arr[this->_current++] = content;
             };
 
 
             size_type size() const {
-                return this->current;
+                return _current;
             };
 
             iterator begin() const {
-                return iterator(this->arr);
+                return iterator(_arr);
             };
 
             iterator end() const {
-                return iterator(this->arr + this->current);
+                return iterator(_arr + _current);
             };
 
         private:
-            T *arr;
-            size_type capacity;
-            size_type current;
+            allocator_type _alloc;
+            T *_arr;
+            size_type _capacity;
+            size_type _current;
     };
 };
 

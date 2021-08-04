@@ -2,7 +2,7 @@
 #include <vector>
 #include <algorithm>
 
-#include "vector/vector.hpp"
+#include "containers/vector.hpp"
 
 void basic()
 {
@@ -38,12 +38,26 @@ void constructor_with_init_value()
     for (; it != ite; it++)
         std::cout << *it << std::endl;
     std::cout << "----------------------------" << std::endl;
-}
 
+    std::vector<int> b(10, 100);
+    std::vector<int>::iterator itb = b.begin();
+    std::vector<int>::iterator itbe = b.end();
+    for (; itb != itbe; itb++)
+        std::cout << *itb << std::endl;
+    std::cout << "----------------------------" << std::endl;
+
+	std::cout << "--------- COPY ----------" << std::endl;
+	ft::vector<int> c(b.begin(), b.end());
+	ft::vector<int>::iterator itc = c.begin();
+	ft::vector<int>::iterator itec = c.end();
+	for (; itc != itec; itc++)
+		std::cout << *itc << std::endl;
+}
 
 int main()
 {
     basic();
     constructor_with_init_value();
+	std::cout << "is integral: " << ft::is_integral<int>::value << std::endl;
     return (0);
 }

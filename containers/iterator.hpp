@@ -80,10 +80,10 @@ namespace ft
 
  		template <class Iter> reverse_iterator(const reverse_iterator<Iter>& rev_it) 
 		:
-			_it(*rev_it)
+			_it(rev_it.base())
 		{} 
 
-		~reverse_iterator() {}
+		//virtual ~reverse_iterator() {}
 
 		// ----------------------------
 
@@ -93,7 +93,8 @@ namespace ft
 		}
 
 		reference operator*() const {
-			return *_it;
+			iterator_type tmp = _it;
+			return *--tmp;
 		}
 
 		reverse_iterator operator+(difference_type n) const {
@@ -106,8 +107,8 @@ namespace ft
 		}
 
 		reverse_iterator operator++(int) {
-			reverse_iterator tmp(*this);
-			--*this;
+			reverse_iterator tmp = *this;
+			--_it;
 			return tmp;
 		}
 
@@ -127,8 +128,12 @@ namespace ft
 
 		reverse_iterator operator--(int) {
 			reverse_iterator tmp(*this);
-			++*this;
+			++_it;
 			return tmp;
+		}
+
+		bool operator!=(reverse_iterator const &right) {
+			return this->base() != right.base();
 		}
 
 		reverse_iterator& operator-=(difference_type n) {
@@ -172,7 +177,7 @@ namespace ft
 
 		~random_access_iterator(){};
 
-		value_type operator*() const {
+		reference  operator*() const {
 			return *ptr;
 		}
 

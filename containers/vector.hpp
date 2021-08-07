@@ -160,19 +160,20 @@ namespace ft
 			size_type l = _current;
 
 			if (n < _current) {
-				_current = n;
+				for (; _current > n; _current--)
+					_alloc.destroy(_arr + _current);
 				return;
 			}
 			if (n > _capacity) {
-				pointer New = _alloc.allocate(n);
+				pointer tmp = _alloc.allocate(n);
 				for (l = 0; l < _current; l++)
-					New[l] = _arr[l];
+					_alloc.construct(tmp + l, _arr[l]);
 				_alloc.deallocate(_arr, _capacity);
 				_capacity = n;
-				_arr = New;
+				_arr = tmp;
 			}
 			for (; l < n; l++)
-				_arr[l] = val;
+				_alloc.construct(_arr + l, val);
 			_current = n;
 		}
 

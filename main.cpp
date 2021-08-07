@@ -108,7 +108,12 @@ void test_resize()
 		a.reserve(a.max_size() + 1);
 	}   catch (const std::length_error& le) {
 	  std::cerr << "Length error: " << le.what() << '\n';
-  }
+  	}
+	try {
+		b.reserve(b.max_size() + 1);
+	}   catch (const std::length_error& le) {
+	  std::cerr << "Length error: " << le.what() << '\n';
+  	}
 }
 
 int main()
@@ -117,14 +122,14 @@ int main()
    // constructor_with_init_value();
 //	std::cout << "is integral: " << ft::is_integral<int>::value << std::endl;
 //	reverse_iterator();
-	//test_resize();
-	ft::vector<int> a;
+	test_resize();
+/* 	ft::vector<int> a;
 	a.push_back(55);
 	a.push_back(45);
 	ft::vector<int>::iterator it = a.begin();
 	it++;
 	std::cout << *a.insert(it, 10) << std::endl;
-	printMyvector(a);
+	printMyvector(a); */
 	/*std::cout << "address a0: " << &a[0] << std::endl;
 	std::cout << a.front() << std::endl;
 	std::cout << a.back() << std::endl;

@@ -140,14 +140,21 @@ void test_reserve()
 void test_insert()
 {
 	ft::vector<int> a;
-
-	a.push_back(25);
-	a.push_back(45);
-	ft::vector<int>::iterator iteA = a.begin();
-	//iteA++;
-	//iteA++;
-	a.insert(iteA, 10);
+	std::vector<int> b;
+	//a.push_back(25);
+	//b.push_back(25);
+	//a.push_back(45);
+	ft::vector<int>::iterator itA = a.begin();
+	std::vector<int>::iterator itB = b.begin();
+	//itA++;
+	//itB++;
+	itA = a.insert(itA, 10);
+	//itA = a.insert(itA, 10);
+	itB = b.insert(itB, 10); 
+	//itB = b.insert(itB, 10); 
 	printMyvector(a);
+	std::cout << std::endl;
+	printRealvector(b);
 }
 
 int main()

@@ -276,16 +276,14 @@ namespace ft
 
 		void push_back (const value_type& val) {
 			if (_current == _capacity) {
-				if (_capacity == 0)
-					_capacity = 1;
-				pointer tmp = _alloc.allocate(_capacity * 2);
+				pointer tmp = _alloc.allocate(_capacity == 0 ? 1 : _capacity * 2);
 				size_type n = 0;
 				for (; n < _current; n++)
 					_alloc.construct(tmp + n, _arr[n]);
 				this->clear();
 				_alloc.deallocate(_arr, _capacity);
 				_arr = tmp;
-				_capacity *= 2;
+				_capacity = _capacity == 0 ? 1 : _capacity * 2;
 				_current = n;
 			}
 			_arr[_current] = val;
@@ -303,9 +301,6 @@ namespace ft
 		iterator insert (iterator position, const value_type& val) {
  			size_type pos = (&(*position) - _arr);
 			if (_current == _capacity) {
-				//if (_capacity == 0)
-				//	_capacity = 1;
-				//std::cout << "oui" << std::endl;
 				pointer tmp = _alloc.allocate(_capacity == 0 ? 1 : _capacity * 2);
 				size_type l = 0;
 				for (; l < pos; l++)
@@ -332,10 +327,31 @@ namespace ft
 			return iterator(_arr + pos);
 		}
 
-		//void insert (iterator position, size_type n, const value_type& val); 
+		void insert (iterator position, size_type n, const value_type& val) {
+			size_type pos = (&(*position) - _arr);
+ 			if (_current + n >= _capacity) {
+				pointer tmp = _alloc.allocate(_capacity == 0 ? n : _capacity + n * 2);
+				size_type l = 0;
+				for (; l < pos; l++)
+					_alloc.construct(tmp + l, _arr[l]);
+				for (size_type i = 0; i < n; i++)
+					_alloc.construct(tmp + l + i, val);
+				for (; _capacity != 0 && l < _current; l++)
+					_alloc.construct(tmp + l + n, _arr[l]);
+				this->clear();
+				_alloc.deallocate(_arr, _capacity);
+				_arr = tmp;
+				_capacity = _capacity == 0 ? n : _capacity + n * 2;
+				_current = l + n;
+			}
+			else {
+				for (size_type l = 0; l < n; l++, position++)
+					position = this->insert(position, val);
+			}
+		}
 
-		template <class InputIterator>
-    	void insert (iterator position, InputIterator first, InputIterator last);
+/* 		template <class InputIterator>
+    	void insert (iterator position, InputIterator first, InputIterator last); */
 
 
 		void clear() {

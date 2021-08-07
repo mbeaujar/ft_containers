@@ -116,31 +116,48 @@ void test_resize()
   	}
 }
 
+void test_reserve()
+{
+	ft::vector<int> a;
+	std::vector<int> b;
+
+	std::cout << "len a: " << a.capacity() << std::endl;
+	std::cout << "len b: " << b.capacity() << std::endl;
+	a.reserve(0);
+	b.reserve(0);
+	std::cout << "len a: " << a.capacity() << std::endl;
+	std::cout << "len b: " << b.capacity() << std::endl;
+	a.reserve(10);
+	b.reserve(10);
+	std::cout << "len a: " << a.capacity() << std::endl;
+	std::cout << "len b: " << b.capacity() << std::endl;
+	a.reserve(5);
+	b.reserve(5);
+	std::cout << "len a: " << a.capacity() << std::endl;
+	std::cout << "len b: " << b.capacity() << std::endl;
+}
+
+void test_insert()
+{
+	ft::vector<int> a;
+
+	a.push_back(25);
+	a.push_back(45);
+	ft::vector<int>::iterator iteA = a.begin();
+	//iteA++;
+	//iteA++;
+	a.insert(iteA, 10);
+	printMyvector(a);
+}
+
 int main()
 {
    	//basic();
-   // constructor_with_init_value();
-//	std::cout << "is integral: " << ft::is_integral<int>::value << std::endl;
-//	reverse_iterator();
-	test_resize();
-/* 	ft::vector<int> a;
-	a.push_back(55);
-	a.push_back(45);
-	ft::vector<int>::iterator it = a.begin();
-	it++;
-	std::cout << *a.insert(it, 10) << std::endl;
-	printMyvector(a); */
-	/*std::cout << "address a0: " << &a[0] << std::endl;
-	std::cout << a.front() << std::endl;
-	std::cout << a.back() << std::endl;
-	std::cout << std::endl;
-	std::cout << *a.begin() << std::endl;
-	std::cout << *a.end() << std::endl;
-	std::cout << std::endl;
-	a.pop_back();*/
-/* 	std::cout << "a size: " << a.size() << std::endl;
-	std::cout << "b size: " << b.size() << std::endl;
-	std::cout << "max size: " << a.max_size() << std::endl;
-	std::cout << "my max size: " << b.max_size() << std::endl; */
+    //constructor_with_init_value();
+    //reverse_iterator();
+	//test_resize();
+	//test_reserve();
+	test_insert();
+
     return (0);
 }

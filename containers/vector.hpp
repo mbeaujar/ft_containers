@@ -37,8 +37,8 @@ namespace ft
 		explicit vector(const allocator_type &alloc = allocator_type())
 		:
 			_alloc(alloc),
-			_arr(_alloc.allocate(1)),
-			_capacity(1),
+			_arr(_alloc.allocate(0)),
+			_capacity(0),
 			_current(0)
 		{}
 
@@ -87,6 +87,7 @@ namespace ft
 		}
 		
 		~vector() {
+			this->clear();
 			_alloc.deallocate(_arr, _capacity);
 		}
 
@@ -98,6 +99,7 @@ namespace ft
 			size_type n = 0;
 			for (pointer tmp = first; tmp != last; tmp++)
 				n++;
+			this->clear();
 			_alloc.deallocate(_arr, _capacity);
 			_arr = _alloc.allocate(n);
 			_capacity = n;
@@ -168,7 +170,9 @@ namespace ft
 				pointer tmp = _alloc.allocate(n);
 				for (l = 0; l < _current; l++)
 					_alloc.construct(tmp + l, _arr[l]);
+				this->clear();
 				_alloc.deallocate(_arr, _capacity);
+				_current = l;
 				_capacity = n;
 				_arr = tmp;
 			}
@@ -187,15 +191,18 @@ namespace ft
 
 		void reserve (size_type n) {
 			if (n > max_size())
-				throw std::length_error("size_type n is greater than max_size");
+				throw std::length_error("vector::reserve");
 			if (n < _capacity)
 				return;
 			pointer tmp = _alloc.allocate(n);
-			for (size_type l = 0; l < _current; l++)
-				tmp[l] = _arr[l];
+			size_type l = 0;
+			for (; l < _current; l++)
+				_alloc.construct(tmp + l, _arr[l]);
+			this->clear();
 			_alloc.deallocate(_arr, _capacity);
 			_arr = tmp;
 			_capacity = n;
+			_current = l;
 		}
 
 		// ----------------------------- Element access
@@ -245,6 +252,7 @@ namespace ft
 			for (InputIterator tmp = first; tmp != last; tmp++)
 				n++;
 			if (n > _capacity) {
+				this->clear();
 				_alloc.deallocate(_arr, _capacity);
 				_arr = _alloc.allocate(n);
 				_capacity = n;
@@ -256,6 +264,7 @@ namespace ft
 
 		void assign (size_type n, const value_type& val) {
 			if (n > _capacity) {
+				this->clear();
 				_alloc.deallocate(_arr, _capacity);
 				_arr = _alloc.allocate(n);
 				_capacity = n;
@@ -267,12 +276,15 @@ namespace ft
 
 		void push_back (const value_type& val) {
 			if (_current == _capacity) {
-				pointer tmp = _arr;
-				size_type old_capacity = _capacity;
-				_arr = _alloc.allocate(_capacity = _capacity * 2);
-				for (size_type n = 0; n < _current; n++)
-					_arr[n] = tmp[n];
-				_alloc.deallocate(tmp, old_capacity);
+				pointer tmp = _alloc.allocate(_capacity * 2);
+				size_type n = 0;
+				for (; n < _current; n++)
+					_alloc.construct(tmp + n, _arr[n]);
+				this->clear();
+				_alloc.deallocate(_arr, _capacity);
+				_arr = tmp;
+				_capacity *= 2;
+				_current = n;
 			}
 			_arr[_current] = val;
 			_current++;
@@ -287,31 +299,45 @@ namespace ft
 		};
  
 		iterator insert (iterator position, const value_type& val) {
- 			if (_current + 1 == _capacity) {
-				pointer tmp = _arr;
-				size_type old_capacity = _capacity;
-				_arr = _alloc.allocate(_capacity = _capacity * 2);
-				for (size_type n = 0; n < _current; n++)
-					_arr[n] = tmp[n];
-				_alloc.deallocate(tmp, old_capacity);
+ 			size_type pos = (&(*position) - _arr);
+			if (_current == _capacity) {
+				pointer tmp = _alloc.allocate(_capacity * 2);
+				size_type l = 0;
+				for (; l < pos; l++)
+					_alloc.construct(tmp + l, _arr[l]);
+				_alloc.construct(tmp + l, _arr[l]);
+				for (; l < _current + 1; l++)
+					_alloc.construct(tmp + l, _arr[l]);
+				this->clear();
+				_alloc.deallocate(_arr, _capacity);
+				_arr = tmp;
+				_capacity *= 2;
+				_current = l;
 			}
-			_current++;
-			value_type tmp = *position;
-			*position = val;
-			iterator it = position;
-			++it;
-			for (size_type l = (&(*position) - _arr); l < _current; l++, it++) {
-				value_type stock = tmp;
-				tmp = *it;
-				*it = stock;
-			} 
-			return position;
+			else {
+				size_type l = pos;
+				value_type tmp = val;
+				for (; l < _current + 1; l++) {
+					value_type stock = tmp;
+					tmp = _arr[l];
+					_arr[l] = stock;
+				}
+				_current++;
+			}
+			return iterator(_arr + pos);
 		}
 
 		//void insert (iterator position, size_type n, const value_type& val); 
 
 		template <class InputIterator>
     	void insert (iterator position, InputIterator first, InputIterator last);
+
+
+		void clear() {
+			for (; _current > 0; _current--) {
+				_alloc.destroy(_arr + _current);
+			}
+		}
 	};
 };
 

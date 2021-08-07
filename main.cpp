@@ -141,29 +141,37 @@ void test_insert()
 {
 	ft::vector<int> a;
 	std::vector<int> b;
-	//a.push_back(25);
-	//b.push_back(25);
+	a.push_back(25);
+	b.push_back(25);
 	//a.push_back(45);
 	ft::vector<int>::iterator itA = a.begin();
 	std::vector<int>::iterator itB = b.begin();
 	//itA++;
 	//itB++;
 	itA = a.insert(itA, 10);
-	//itA = a.insert(itA, 10);
+	itA = a.insert(itA, 10);
+	itA = a.insert(itA, 10);
+	itA = a.end();
+	itA = a.insert(itA, 10);
 	itB = b.insert(itB, 10); 
-	//itB = b.insert(itB, 10); 
+	itB = b.insert(itB, 10); 
+	itB = b.insert(itB, 10); 
+	itB = b.end();
+	itB = b.insert(itB, 10); 
 	printMyvector(a);
 	std::cout << std::endl;
 	printRealvector(b);
+	std::cout << "cap: " << a.capacity() << " curr: " << a.size() << std::endl;
+	std::cout << "cap: " << b.capacity() << " curr: " << b.size() << std::endl;
 }
 
 int main()
 {
-   	//basic();
-    //constructor_with_init_value();
-    //reverse_iterator();
-	//test_resize();
-	//test_reserve();
+   	basic();
+    constructor_with_init_value();
+    reverse_iterator();
+	test_resize();
+	test_reserve();
 	test_insert();
 
     return (0);

@@ -315,14 +315,27 @@ namespace ft
 				_current = l + 1;
 			}
 			else {
-				size_type l = pos;
+				pointer tmp = _alloc.allocate(_current - pos);
+				for (size_type i = 0; i < (_current - pos); i++)
+					_alloc.construct(tmp + i, *(_arr + pos + i));
+				for (size_type l = pos; l < _current; l++)
+					_alloc.destroy(_arr + l);
+				_alloc.construct(_arr + pos, val);
+				size_type i = 0;
+				for (size_type l = pos + 1; l < _current + 1; l++, i++) {
+					_alloc.construct(_arr + l, *(tmp + i));
+					_alloc.destroy(tmp + i);
+				}
+				_alloc.deallocate(tmp, _current - pos);
+				_current++;
+/* 				size_type l = pos;
 				value_type tmp = val;
 				for (; l < _current + 1; l++) {
 					value_type stock = tmp;
 					tmp = _arr[l];
 					_arr[l] = stock;
 				}
-				_current++;
+				_current++; */
 			}
 			return iterator(_arr + pos);
 		}
@@ -350,9 +363,45 @@ namespace ft
 			}
 		}
 
-/* 		template <class InputIterator>
-    	void insert (iterator position, InputIterator first, InputIterator last); */
+ 		template <class InputIterator>
+	  	void insert (iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
+			size_type pos = (&(*position) - _arr);
+			size_type n = 0;
+			for (InputIterator tmp = first; tmp != last; tmp++)
+				n++;
+			if (_current + n >= _capacity) {
+				pointer tmp = _alloc.allocate(_capacity == 0 ? n : _capacity + n * 2);
+				size_type l = 0;
+				for (; l < pos; l++)
+					_alloc.construct(tmp + l, _arr[l]);
+				for (size_type i = 0; i < n && first != last; i++, first++)
+					_alloc.construct(tmp + l + i, *first);
+				for (; _capacity != 0 && l < _current; l++)
+					_alloc.construct(tmp + l + n, _arr[l]);
+				this->clear();
+				_alloc.deallocate(_arr, _capacity);
+				_arr = tmp;
+				_capacity = _capacity == 0 ? n : _capacity * 2;
+				_current = l + n;
+			} else {
+				for (size_type l = 0; l < n && first != last; l++, position++, first++)
+					position = this->insert(position, *first);
+			}
+		}
 
+		iterator erase (iterator position) {
+			size_type pos = (&(*position) - _arr);
+			if (_current > 0) {
+				_alloc.destroy(&(*position));
+				for (; pos < _current - 1; pos++) {
+					_alloc.construct(_arr + pos, *(_arr + pos + 1));
+					_alloc.destroy(_arr + pos + 1);
+				}
+				_current--;
+			}
+			return iterator(_arr + pos);
+		}
+		//iterator erase (iterator first, iterator last);
 
 		void clear() {
 			for (; _current > 0; _current--) {

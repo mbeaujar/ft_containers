@@ -164,7 +164,7 @@ void test_insert()
 		printRealvector(b);
 		std::cout << "cap: " << a.capacity() << " curr: " << a.size() << std::endl;
 		std::cout << "cap: " << b.capacity() << " curr: " << b.size() << std::endl;
-	}*/
+	}
 	{
 		ft::vector<int> a;
 		std::vector<int> b;
@@ -179,7 +179,46 @@ void test_insert()
 		printMyvector(a);
 		std::cout << std::endl;
 		printRealvector(b);
+		std::cout << std::endl;
 	}
+	{
+		ft::vector<int> a;
+
+		a.push_back(10);
+		a.push_back(100);
+		a.push_back(1000);
+		ft::vector<int>::iterator it = 	a.begin();
+		ft::vector<int>::iterator ite = a.end();
+		ft::vector<int> b;
+		b.push_back(50);
+		b.push_back(50);
+		b.push_back(50);
+		ft::vector<int>::iterator position = b.end();
+		b.insert(position, it, ite);
+		printMyvector(b);
+	}*/
+	{
+		ft::vector<int> a;
+
+		a.push_back(50);
+		ft::vector<int>::iterator it = a.end();
+		a.insert(it, 10);
+		printMyvector(a);
+	}
+}
+
+void test_erase() 
+{
+	ft::vector<int> a;
+
+	a.push_back(25);
+	a.push_back(45);
+	a.push_back(55);
+	ft::vector<int>::iterator position = a.begin();
+	position++;
+	//position++;
+	a.erase(position);
+	printMyvector(a);
 }
 
 int main()
@@ -190,6 +229,7 @@ int main()
 	//test_resize();
 	//test_reserve();
 	test_insert();
+	//test_erase();
 
     return (0);
 }

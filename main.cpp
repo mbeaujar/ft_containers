@@ -210,26 +210,42 @@ void test_insert()
 void test_erase() 
 {
 	ft::vector<int> a;
+	std::vector<int> b;
 
-	a.push_back(25);
-	a.push_back(45);
+ 	a.push_back(25);
+ 	a.push_back(25);
+ 	b.push_back(25);
+ 	b.push_back(25);
+	/*a.push_back(45);
 	a.push_back(55);
-	ft::vector<int>::iterator position = a.begin();
-	position++;
-	//position++;
-	a.erase(position);
+	a.push_back(61235);
+	a.push_back(6445);
+	a.push_back(555);
+	a.push_back(65); */
+	ft::vector<int>::iterator it = a.begin();
+	ft::vector<int>::iterator ite = a.end();
+	std::vector<int>::iterator iit = b.begin();
+	std::vector<int>::iterator iite = b.end();
+	//it++;
+	ite--;
+	iite--;
+	a.erase(it, ite);
+	b.erase(iit, iite);
 	printMyvector(a);
+	std::cout << std::endl;
+	printRealvector(b);
 }
 
 int main()
 {
-   //	basic();
-    //constructor_with_init_value();
-    //reverse_iterator();
+	//	basic();
+	//constructor_with_init_value();
+	//reverse_iterator();
 	//test_resize();
 	//test_reserve();
-	test_insert();
+	//test_insert();
 	//test_erase();
+	std::vector<int> a(2, 200);
 
-    return (0);
+	return (0);
 }

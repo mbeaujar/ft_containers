@@ -293,10 +293,6 @@ namespace ft
 		void pop_back() {
 			_alloc.destroy(_arr + --_current);
 		}
-
-		allocator_type get_allocator() const {
-			return _alloc;
-		};
  
 		iterator insert (iterator position, const value_type& val) {
  			size_type pos = (&(*position) - _arr);
@@ -328,14 +324,6 @@ namespace ft
 				}
 				_alloc.deallocate(tmp, _current - pos);
 				_current++;
-/* 				size_type l = pos;
-				value_type tmp = val;
-				for (; l < _current + 1; l++) {
-					value_type stock = tmp;
-					tmp = _arr[l];
-					_arr[l] = stock;
-				}
-				_current++; */
 			}
 			return iterator(_arr + pos);
 		}
@@ -393,22 +381,126 @@ namespace ft
 			size_type pos = (&(*position) - _arr);
 			if (_current > 0) {
 				_alloc.destroy(&(*position));
-				for (; pos < _current - 1; pos++) {
-					_alloc.construct(_arr + pos, *(_arr + pos + 1));
-					_alloc.destroy(_arr + pos + 1);
+				for (size_type l = pos; l < _current - 1; l++) {
+					_alloc.construct(_arr + l, *(_arr + l + 1));
+					_alloc.destroy(_arr + l + 1);
 				}
 				_current--;
 			}
 			return iterator(_arr + pos);
 		}
-		//iterator erase (iterator first, iterator last);
+
+		iterator erase (iterator first, iterator last) {
+			size_type pos = (&(*first) - _arr);
+			size_type n = 0;
+			for (iterator tmp = first; first != last; first++)
+				n++;
+			if (_current > 0 && n > 0) {
+				for (size_type i = 0; i < n; i++)
+					_alloc.destroy(_arr + pos + i);
+				for (size_type l = pos; l + n < _current; l++) {
+					_alloc.construct(_arr + l, *(_arr + l + n));
+					_alloc.destroy(_arr + l + n);
+				}
+				_current -= n;
+			}
+			return iterator(_arr + pos);
+		}
+
+		void swap (vector& x) {
+			if (this == &x)
+				return;
+			allocator_type tmp_alloc 	= x._alloc;
+			pointer tmp_arr 			= x._arr;
+			size_type tmp_capacity 		= x._capacity;
+			size_type tmp_current 		= x._current;
+
+			x._alloc = this->_alloc;
+			x._arr =  this->_arr;
+			x._capacity =  this->_capacity;
+			x._current = this->_current;
+
+			this->_alloc 	= tmp_alloc;
+			this->_arr 		= tmp_arr;
+			this->_capacity = tmp_capacity;
+			this->_current 	= tmp_current;
+		}
 
 		void clear() {
 			for (; _current > 0; _current--) {
 				_alloc.destroy(_arr + _current);
 			}
 		}
+
+		// ------------------ Allocator
+
+		allocator_type get_allocator() const {
+			return allocator_type();
+		}
 	};
+
+	// ----------------------- Non-member function overloads
+
+
+	// ------------- relational operators
+
+	template <class T, class Alloc>
+	bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+		typename ft::vector<T, Alloc>::const_iterator it = lhs.begin();
+		typename ft::vector<T, Alloc>::const_iterator first = rhs.begin();
+
+		for (; first != rhs.end() && it != lhs.end(); first++, it++) {
+			if (*first != *it)
+				return false;
+		}
+		if (first != rhs.end() || it != lhs.end())
+			return false;  
+		return true;
+	};
+
+	template <class T, class Alloc>
+  	bool operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+		  return !(lhs == rhs);
+	};
+
+	template <class T, class Alloc>
+  	bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+		typename ft::vector<T, Alloc>::const_iterator it = lhs.begin();
+		typename ft::vector<T, Alloc>::const_iterator first = rhs.begin();
+
+		for (; first != rhs.end() && it != lhs.end(); it++, first++) {
+			if (*it < *first)
+				return true;
+			if (*it > *first)
+				return false;
+		}
+		if (it == lhs.end() && first != rhs.end())
+			return true;
+		return false;
+	};
+
+	template <class T, class Alloc>
+  	bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+		  return (lhs < rhs || lhs == rhs);
+	};
+
+	template <class T, class Alloc>
+  	bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+		return !(lhs < rhs); 
+	};
+
+	template <class T, class Alloc>
+  	bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+		return (lhs > rhs || lhs == rhs);
+	};
+
+	// ------------------------ Swap 
+
+	template <class T, class Alloc>
+  	void swap (vector<T,Alloc>& x, vector<T,Alloc>& y) {
+		x.swap(y);
+	}
+
 };
 
 #endif

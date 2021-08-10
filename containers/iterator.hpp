@@ -182,7 +182,11 @@ namespace ft
 		}
 
 		bool operator!=(random_access_iterator const &right) {
-			return this->ptr != right.ptr;
+			return ptr != right.ptr;
+		}
+
+		bool operator==(random_access_iterator const &right) {
+			return ptr == right.ptr;
 		}
 
 		random_access_iterator &operator++() {

@@ -83,8 +83,6 @@ namespace ft
 			_it(rev_it.base())
 		{} 
 
-		//virtual ~reverse_iterator() {}
-
 		// ----------------------------
 
 
@@ -175,18 +173,29 @@ namespace ft
 			ptr(p)
 		{}
 
+		random_access_iterator& operator=(random_access_iterator const &copy) {
+			if (this == &copy)
+				return *this;
+			ptr = copy.ptr;
+			return *this;
+		}
+
 		~random_access_iterator(){};
 
-		reference  operator*() const {
-			return *ptr;
+		bool operator==(random_access_iterator const &right) {
+			return ptr == right.ptr;
 		}
 
 		bool operator!=(random_access_iterator const &right) {
 			return ptr != right.ptr;
 		}
 
-		bool operator==(random_access_iterator const &right) {
-			return ptr == right.ptr;
+		reference  operator*() const {
+			return *ptr;
+		}
+
+		pointer operator->() const {
+			return &(operator*());
 		}
 
 		random_access_iterator &operator++() {
@@ -209,6 +218,28 @@ namespace ft
 			random_access_iterator tmp(*this);
 			--*this;
 			return tmp;
+		}
+
+		random_access_iterator operator+(difference_type n) const {
+			return random_access_iterator(ptr + n);
+		}
+
+		random_access_iterator operator-(difference_type n) const {
+			return random_access_iterator(ptr - n);
+		}
+
+		random_access_iterator& operator+=(difference_type n) {
+			ptr += n;
+			return *this;
+		}
+
+		random_access_iterator& operator-=(difference_type n) {
+			ptr -= n;
+			return *this;
+		}
+
+		reference operator[](difference_type n) const {
+			return *(ptr + n);
 		}
 	};
 

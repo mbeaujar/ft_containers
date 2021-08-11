@@ -73,10 +73,11 @@ namespace ft
 		:
 			_alloc(x._alloc)
 		{
-			pointer first = x.begin();
-			pointer last = x.end();
+			typename ft::vector<T>::const_iterator first = x.begin();
+			typename ft::vector<T>::const_iterator last = x.end();
+			typename ft::vector<T>::const_iterator tmp = first;
 			size_type n = 0;
-			for (pointer tmp = first; tmp != last; tmp++)
+			for (tmp = first; tmp != last; tmp++)
 				n++;
 			_arr = _alloc.allocate(n);
 			_capacity = n;
@@ -94,10 +95,11 @@ namespace ft
 		vector& operator= (const vector& x) {
 			if (this == &x)
 				return *this;
-			pointer first = x.begin();
-			pointer last = x.end();
+			typename ft::vector<T>::const_iterator first = x.begin();
+			typename ft::vector<T>::const_iterator last = x.end();
+			typename ft::vector<T>::const_iterator tmp;
 			size_type n = 0;
-			for (pointer tmp = first; tmp != last; tmp++)
+			for (tmp = first; tmp != last; tmp++)
 				n++;
 			this->clear();
 			_alloc.deallocate(_arr, _capacity);

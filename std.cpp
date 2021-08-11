@@ -1,9 +1,10 @@
-#include "containers/vector.hpp"
-
+#include <vector>
+#include <iostream>
+ 
 template <typename T>
-void printvector(ft::vector<T> a)
+void printvector(std::vector<T> a)
 {
-	typename ft::vector<T>::iterator it;
+	typename std::vector<T>::iterator it;
 	int i = 0;
 	for (it = a.begin(); it != a.end(); it++, i++)
 		std::cout << "#" << i << " " << *it << std::endl;
@@ -15,17 +16,17 @@ void printvector(ft::vector<T> a)
 void constructor_vector()
 {
 	std::cout << "------------- CONSTRUCTOR VECTOR ---------" << std::endl;
-	ft::vector<int> a;
+	std::vector<int> a;
 	printvector(a);
-	ft::vector<int> b(2, 200);
+	std::vector<int> b(2, 200);
 	printvector(b);
-	ft::vector<int> c(b.begin(), b.end());
+	std::vector<int> c(b.begin(), b.end());
 	printvector(c);
-	ft::vector<int> d(c);
+	std::vector<int> d(c);
 	printvector(d);
-	ft::vector<int> e = d;
+	std::vector<int> e = d;
 	printvector(e);
-	ft::vector<int> f;
+	std::vector<int> f;
 	f.push_back(10);
 	f.push_back(20);
 	f.push_back(30);
@@ -42,34 +43,34 @@ void constructor_vector()
 void iterator_test()
 {
 	std::cout << "------------- ITERATOR VECTOR ------------" << std::endl;
-	ft::vector<int> a;
+	std::vector<int> a;
 	a.push_back(10);
 	std::cout << "begin: " << *a.begin() << std::endl;
 	std::cout << "end: " << *a.end() << std::endl;
 	std::cout << "rbegin: " << *a.rbegin() << std::endl;
 	std::cout << "rend: " << *a.rend() << std::endl;
-	const ft::vector<int> b(2, 300);
-	ft::vector<int>::const_iterator it = b.begin();
-	ft::vector<int>::const_iterator ite = b.end();
+	const std::vector<int> b(2, 300);
+	std::vector<int>::const_iterator it = b.begin();
+	std::vector<int>::const_iterator ite = b.end();
 	while (it != ite)
 	{
 		std::cout << *it << std::endl;
 		it++;
 	}
-	ft::vector<int>::const_reverse_iterator first = b.rbegin();
-	ft::vector<int>::const_reverse_iterator last = b.rend();
+	std::vector<int>::const_reverse_iterator first = b.rbegin();
+	std::vector<int>::const_reverse_iterator last = b.rend();
 	while (first != last)
 	{
 		std::cout << *first << std::endl;
 		first++;
 	}
-	ft::vector<int> c;
+	std::vector<int> c;
 	c.push_back(10);
 	c.push_back(20);
 	c.push_back(30);
 	c.push_back(40);
-	ft::vector<int>::reverse_iterator rit = c.rbegin();
-	ft::vector<int>::reverse_iterator rite = c.rend();
+	std::vector<int>::reverse_iterator rit = c.rbegin();
+	std::vector<int>::reverse_iterator rite = c.rend();
 	while (rit != rite)
 	{
 		std::cout << *rit << std::endl;

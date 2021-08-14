@@ -6,6 +6,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <sstream>
 
 namespace ft
 {
@@ -32,13 +33,24 @@ namespace ft
 		size_type _capacity;
 		size_type _current;
 
+
+		// solution -> https://stackoverflow.com/questions/10510077/size-t-convert-cast-to-string-in-c
+		template <typename tostring>
+		std::string to_string(tostring n)
+		{
+			std::ostringstream ss;
+			ss << n;
+			return ss.str();
+		}
+
 	public:
 		//// ----------------------------------- Member Functions
 
 		explicit vector(const allocator_type &alloc = allocator_type())
 		:
 			_alloc(alloc),
-			_arr(_alloc.allocate(0)),
+			//_arr(_alloc.allocate(0)),
+			_arr(0),
 			_capacity(0),
 			_current(0)
 		{}
@@ -222,13 +234,13 @@ namespace ft
  
 		reference at (size_type n) {
 			if (n < 0 || n > _current)
-				throw std::out_of_range("vector::_M_range_check: __n (which is " + std::to_string(n) + ") >= this->size() (which is " + std::to_string(this->size()) + ")");
+				throw std::out_of_range("vector::_M_range_check: __n (which is " + to_string(n) + ") >= this->size() (which is " + to_string(this->size()) + ")");
 			return _arr[n];
 		}
 
 		const_reference at (size_type n) const {
 			if (n < 0 || n > _current)
-				throw std::out_of_range("vector::_M_range_check: __n (which is " + std::to_string(n) + ") >= this->size() (which is " + std::to_string(this->size()) + ")");
+				throw std::out_of_range("vector::_M_range_check: __n (which is " + to_string(n) + ") >= this->size() (which is " + to_string(this->size()) + ")");
 			return _arr[n];
 		}
 

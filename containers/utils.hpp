@@ -25,8 +25,6 @@ namespace ft {
 	template <class T> struct is_integral : public integral_constant<T, false> {};
 	template <> struct is_integral<bool> : public integral_constant<bool, true> {};
 	template <> struct is_integral<char> : public integral_constant<char, true> {};
-	template <> struct is_integral<char16_t> : public integral_constant<char16_t, true> {};
-	template <> struct is_integral<char32_t> : public integral_constant<char32_t, true> {};
 	template <> struct is_integral<wchar_t> : public integral_constant<wchar_t, true> {};
 	template <> struct is_integral<signed char> : public integral_constant<signed char, true> {};
 	template <> struct is_integral<short int> : public integral_constant<short int, true> {};

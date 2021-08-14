@@ -66,7 +66,7 @@ namespace ft
 		// ------------------ Constructor
 		reverse_iterator()
 		:
-			_it(nullptr)
+			_it(0)
 		{}
 
 		explicit reverse_iterator(iterator_type it)
@@ -214,7 +214,7 @@ namespace ft
 	public:
 		random_access_iterator()
 		:
-			_ptr(nullptr)
+			_ptr(0)
 		{}
 
 		random_access_iterator(pointer p)

@@ -47,9 +47,7 @@ void iterator_test()
 	ft::vector<int> a;
 	a.push_back(10);
 	std::cout << "begin: " << *a.begin() << std::endl;
-	//std::cout << "end: " << *a.end() << std::endl;
 	std::cout << "rbegin: " << *a.rbegin() << std::endl;
-	//std::cout << "rend: " << *a.rend() << std::endl;
 	const ft::vector<int> b(2, 300);
 	ft::vector<int>::const_iterator it = b.begin();
 	ft::vector<int>::const_iterator ite = b.end();
@@ -235,11 +233,7 @@ void pushpop_test()
 	a.pop_back();
 	printvector(a);
 	a.pop_back();
-	/*a.pop_back();
-	a.pop_back();
-	a.pop_back();
-	a.pop_back();
-	a.pop_back();*/
+	//a.pop_back();
 	printvector(a);
 }
 
@@ -325,6 +319,9 @@ void operator_test()
 	ft::swap(a, b);
 	if (a < b)
 		std::cout << "a is less than b" << std::endl;
+	a.swap(b);
+	if (a > b)
+		std::cout << "a is greater than b" << std::endl;
 }
 
 
@@ -368,6 +365,32 @@ void all_last_test()
 		b.reserve(b.get_allocator().max_size() + 1);
 	} catch (std::exception &e) {
 		std::cout << "exc: " << e.what() << std::endl;
+	}
+
+	ft::vector<int> c(4, 10);
+	{
+		int &ref = c.front();
+		const int &c_ref = c.front();
+		std::cout << ref << std::endl;
+		std::cout << c_ref << std::endl;
+	}
+	{
+		int &ref = c.back();
+		const int &c_ref = c.back();
+		std::cout << ref << std::endl;
+		std::cout << c_ref << std::endl;
+	}
+	{
+		int &ref = c.at(2);
+		const int &c_ref = c.at(2);
+		std::cout << ref << std::endl;
+		std::cout << c_ref << std::endl;
+	}
+	{
+		int &ref = c[1];
+		const int &c_ref = c[1];
+		std::cout << ref << std::endl;
+		std::cout << c_ref << std::endl;
 	}
 }
 

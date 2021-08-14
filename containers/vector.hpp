@@ -253,6 +253,8 @@ namespace ft
 
 			for (InputIterator tmp = first; tmp != last; tmp++)
 				n++;
+			if (n > max_size())
+				throw std::length_error("std::bad_alloc");
 			if (n > _capacity) {
 				this->clear();
 				_alloc.deallocate(_arr, _capacity);
@@ -267,6 +269,8 @@ namespace ft
 		}
 
 		void assign (size_type n, const value_type& val) {
+			if (n > max_size() || n < 0)
+				throw std::length_error("std::bad_alloc");
 			if (n > _capacity) {
 				this->clear();
 				_alloc.deallocate(_arr, _capacity);

@@ -218,6 +218,10 @@ void assign_test()
 	printvector(c);
 	c.assign(0, 0);
 	printvector(c);
+	c.assign(100, 100);
+	printvector(c);
+	c.assign(-0, 0);
+	printvector(c);
 }
 
 void pushpop_test()

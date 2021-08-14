@@ -120,7 +120,7 @@ namespace ft
 
  		const_iterator begin() const {
 			return const_iterator(_arr);
-		} 
+		}
 
 		iterator end() {
 			if (this->empty())
@@ -248,7 +248,7 @@ namespace ft
 		// -------------------------- Modifiers
 
 		template <class InputIterator>
-  		void assign (InputIterator first, InputIterator last) {
+  		void assign (InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) {
 			size_type n = 0;
 
 			for (InputIterator tmp = first; tmp != last; tmp++)
@@ -259,6 +259,8 @@ namespace ft
 				_arr = _alloc.allocate(n);
 				_capacity = n;
 			}
+			else
+				this->clear();
 			_current = n;
 			for (pointer it = _arr; first != last; first++, it++)
 				_alloc.construct(it, *first);
@@ -271,9 +273,11 @@ namespace ft
 				_arr = _alloc.allocate(n);
 				_capacity = n;
 			}
+			else
+				this->clear();
 			_current = n;
-			for (pointer it = _arr; n; n--, it++)
-				_alloc.construct(it, val);
+			for (size_type l = 0; n; n--, l++)
+				_alloc.construct(_arr + l, val);
 		}
 
 		void push_back (const value_type& val) {
@@ -293,6 +297,7 @@ namespace ft
 		}
 
 		void pop_back() {
+			//if (_current > 0)
 			_alloc.destroy(_arr + --_current);
 		}
  

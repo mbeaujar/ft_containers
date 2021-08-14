@@ -160,42 +160,42 @@ namespace ft
 
 	template <typename T>
 	bool operator<(const reverse_iterator<T> &l, const reverse_iterator<T> &r) {
-		return l.base() < r.base();
+		return l.base() > r.base();
 	};
 
  	template <typename T, typename U>
 	bool operator<(const reverse_iterator<T> &l, const reverse_iterator<U> &r) {
-		return l.base() < r.base();
+		return l.base() > r.base();
 	};
 
 	template <typename T>
 	bool operator<=(const reverse_iterator<T> &l, const reverse_iterator<T> &r) {
-		return l.base() <= r.base();
+		return l.base() >= r.base();
 	};
 
  	template <typename T, typename U>
 	bool operator<=(const reverse_iterator<T> &l, const reverse_iterator<U> &r) {
-		return l.base() <= r.base();
+		return l.base() >= r.base();
 	};
 
 	template <typename T>
 	bool operator>(const reverse_iterator<T> &l, const reverse_iterator<T> &r) {
-		return l.base() > r.base();
+		return l.base() < r.base();
 	};
 
  	template <typename T, typename U>
 	bool operator>(const reverse_iterator<T> &l, const reverse_iterator<U> &r) {
-		return l.base() > r.base();
+		return l.base() < r.base();
 	};
 
 	template <typename T>
 	bool operator>=(const reverse_iterator<T> &l, const reverse_iterator<T> &r) {
-		return l.base() >= r.base();
+		return l.base() <= r.base();
 	};
 
  	template <typename T, typename U>
 	bool operator>=(const reverse_iterator<T> &l, const reverse_iterator<U> &r) {
-		return l.base() >= r.base();
+		return l.base() <= r.base();
 	};
 
 	template <typename T>
@@ -237,7 +237,7 @@ namespace ft
 		// convert iterator non const to iterator const --- solution -> https://www.py4u.net/discuss/133392
 		operator random_access_iterator<const T>() {return random_access_iterator<const T>(_ptr);}
 
-		virtual ~random_access_iterator(){};
+		~random_access_iterator(){};
 
 
 		pointer base() const {

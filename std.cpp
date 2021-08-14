@@ -1,7 +1,7 @@
-#include <vector>
+#include "containers/vector.hpp"
 #include <iostream>
+#include <vector>
 
- 
 template <typename T>
 void printvector(std::vector<T> a)
 {
@@ -76,6 +76,80 @@ void iterator_test()
 	{
 		std::cout << *rit << std::endl;
 		rit++;
+		if (rit == rite) {
+			std::cout << "stop" << std::endl;
+			break;
+		}
+	}
+
+	std::vector<int> e(1, 200);
+	std::vector<int> f(1, 400);
+
+	std::vector<int>::iterator efirst = e.begin();
+	std::vector<int>::iterator ffirst = f.begin();
+	if (efirst == ffirst)
+		std::cout << "a" << std::endl;
+	if (efirst != ffirst)
+		std::cout << "iterator e is different from b" << std::endl;
+	if (efirst > ffirst)
+		std::cout << "iterator e is greater than f" << std::endl;
+	if (efirst < ffirst)
+		std::cout << "iterator e is less than f" << std::endl;
+	*efirst = 400;
+	if (efirst >= ffirst)
+		std::cout << "iterator e ix greater than or equal to f" << std::endl;
+	if (efirst <= ffirst)
+		std::cout << "iterator e is less than or equal to f" << std::endl;
+	std::vector<int>::reverse_iterator refirst = e.rbegin();
+	std::vector<int>::reverse_iterator rffirst = f.rbegin();
+	std::cout << *refirst << std::endl;
+	std::cout << *rffirst << std::endl;
+	if (refirst == rffirst)
+		std::cout << "a" << std::endl;
+	if (refirst != rffirst)
+		std::cout << "a iterator e is different from b" << std::endl;
+	if (refirst > rffirst)
+		std::cout << "a iterator e is greater than f" << std::endl;
+	if (refirst < rffirst)
+		std::cout << "a iterator e is less than f" << std::endl;
+	*refirst = 400;
+	if (refirst >= rffirst)
+		std::cout << "a iterator e ix greater than or equal to f" << std::endl;
+	if (refirst <= rffirst)
+		std::cout << "a iterator e is less than or equal to f" << std::endl;
+	
+	{
+		std::vector<int> z(10, 100);
+		std::vector<int>::iterator it = z.begin();
+		std::vector<int>::const_iterator cit = z.begin();
+		if (cit == it)
+			std::cout << "a" << std::endl;
+		if (cit != it)
+			std::cout << "b" << std::endl;
+		if (cit > it)
+			std::cout << "c" << std::endl;
+		if (cit >= it)
+			std::cout << "d" << std::endl;
+		if (cit < it)
+			std::cout << "e" << std::endl;
+		if (cit <= it)
+			std::cout << "f" << std::endl;
+
+		std::vector<int> w(10, 100);
+		std::vector<int>::reverse_iterator first = w.rbegin();
+		std::vector<int>::const_reverse_iterator cfirst = w.rbegin();
+		if (first == cfirst)
+			std::cout << "g" << std::endl;
+		if (first != cfirst)
+			std::cout << "h" << std::endl;
+		if (first > cfirst)
+			std::cout << "i" << std::endl;
+		if (first >= cfirst)
+			std::cout << "j" << std::endl;
+		if (first < cfirst)
+			std::cout << "k" << std::endl;
+		if (first <= cfirst)
+			std::cout << "l" << std::endl;
 	}
 }
 
@@ -161,7 +235,7 @@ void pushpop_test()
 	a.pop_back();
 	a.pop_back();
 	a.pop_back();
-	a.pop_back(); */
+	a.pop_back();*/
 	printvector(a);
 }
 
@@ -225,13 +299,38 @@ void insert_test()
 	printvector(d);
 }
 
+void operator_test()
+{
+	std::vector<int> a;
+	std::vector<int> b;
+	if (a == b)
+		std::cout << "a and b is equal" << std::endl;
+	a.push_back(25);
+	if (a != b)
+		std::cout << "a and b is not equal" << std::endl;
+	if (a > b)
+		std::cout << "a is greater than b" << std::endl;
+	if (b < a)
+		std::cout << "b is less than a" << std::endl;
+	if (a >= b)
+		std::cout << "a is greater than or equal to b" << std::endl;
+	if (b <= a)
+		std::cout << "b is less than or equal to a" << std::endl;
+	if (a < b)
+		std::cout << "a is less than b" << std::endl;
+	std::swap(a, b);
+	if (a < b)
+		std::cout << "a is less than b" << std::endl;
+}
+
 int main()
 {
 	constructor_vector();
 	iterator_test();
 	resize_test();
 	assign_test(); 
-	//pushpop_test();
+	pushpop_test();
 	insert_test();
+	operator_test();
 	return (0);
 }

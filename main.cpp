@@ -1,4 +1,6 @@
 #include "containers/vector.hpp"
+#include <iostream>
+#include <vector>
 
 template <typename T>
 void printvector(ft::vector<T> a)
@@ -85,8 +87,8 @@ void iterator_test()
 
 	ft::vector<int>::iterator efirst = e.begin();
 	ft::vector<int>::iterator ffirst = f.begin();
-	ft::vector<int>::reverse_iterator refirst = e.rbegin();
-	ft::vector<int>::reverse_iterator rffirst = f.rbegin();
+	if (efirst == ffirst)
+		std::cout << "a" << std::endl;
 	if (efirst != ffirst)
 		std::cout << "iterator e is different from b" << std::endl;
 	if (efirst > ffirst)
@@ -98,6 +100,24 @@ void iterator_test()
 		std::cout << "iterator e ix greater than or equal to f" << std::endl;
 	if (efirst <= ffirst)
 		std::cout << "iterator e is less than or equal to f" << std::endl;
+	ft::vector<int>::reverse_iterator refirst = e.rbegin();
+	ft::vector<int>::reverse_iterator rffirst = f.rbegin();
+	std::cout << *refirst << std::endl;
+	std::cout << *rffirst << std::endl;
+	if (refirst == rffirst)
+		std::cout << "a" << std::endl;
+	if (refirst != rffirst)
+		std::cout << "a iterator e is different from b" << std::endl;
+	if (refirst > rffirst)
+		std::cout << "a iterator e is greater than f" << std::endl;
+	if (refirst < rffirst)
+		std::cout << "a iterator e is less than f" << std::endl;
+	*refirst = 400;
+	if (refirst >= rffirst)
+		std::cout << "a iterator e ix greater than or equal to f" << std::endl;
+	if (refirst <= rffirst)
+		std::cout << "a iterator e is less than or equal to f" << std::endl;
+	
 	{
 		ft::vector<int> z(10, 100);
 		ft::vector<int>::iterator it = z.begin();

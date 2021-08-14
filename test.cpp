@@ -37,5 +37,3 @@ int main()
 		std::cout << "l" << std::endl;
 	return 0;
 }
-
-

@@ -327,6 +327,17 @@ void operator_test()
 		std::cout << "a is less than b" << std::endl;
 }
 
+
+void all_last_test()
+{
+	ft::vector<int> a(3, 100);
+	for (int i = 0; i < 3; i++)
+		std::cout << a[i] << std::endl;
+	
+
+
+}
+
 int main()
 {
 	constructor_vector();

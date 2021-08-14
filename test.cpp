@@ -6,8 +6,8 @@ int main()
 {
 	try
 	{
-		std::vector<int> a;
-		a.assign(a.get_allocator().max_size() + 1, 100);
+		ft::vector<int> a;
+		a.at(10);
 	} catch (std::exception &e) {
 		std::cout << "exc: " << e.what() << std::endl;
 	}

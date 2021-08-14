@@ -21,4 +21,7 @@ clean :
 fclean : clean
 	$(RM) $(NAME)
 
+push :
+	git push git@github.com:mbeaujar/ft_containers.git
+
 re : fclean all

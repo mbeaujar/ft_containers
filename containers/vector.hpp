@@ -222,13 +222,13 @@ namespace ft
  
 		reference at (size_type n) {
 			if (n < 0 || n > _current)
-				throw std::out_of_range("vector:: M range check:\tn (which is " + std::to_string(n) + ") >= this->size() (which is " + std::to_string(this->size()) + ")");
+				throw std::out_of_range("vector:: M range check:  n (which is " + std::to_string(n) + ") >= this->size() (which is " + std::to_string(this->size()) + ")");
 			return _arr[n];
 		}
 
 		const_reference at (size_type n) const {
 			if (n < 0 || n > _current)
-				throw std::out_of_range("vector:: M range check:\tn (which is " + std::to_string(n) + ") >= this->size() (which is " + std::to_string(this->size()) + ")");
+				throw std::out_of_range("vector:: M range check:  n (which is " + std::to_string(n) + ") >= this->size() (which is " + std::to_string(this->size()) + ")");
 			return _arr[n];
 		}
 

@@ -335,7 +335,40 @@ void all_last_test()
 		std::cout << a[i] << std::endl;
 	
 
+	// exceptions
 
+	ft::vector<int> b;
+
+	try {
+		b.assign(-1, 100);
+	} catch (std::exception &e) {
+		std::cout << "exc: " << e.what() << std::endl;
+	}
+	try {
+		b.assign(b.get_allocator().max_size() + 1, 100);
+	} catch (std::exception &e) {
+		std::cout << "exc: " << e.what() << std::endl;
+	}
+	try {
+		b.at(-1);
+	} catch (std::exception &e) {
+		std::cout << "exc: " << e.what() << std::endl;
+	}
+	try {
+		b.at(b.get_allocator().max_size() + 1);
+	} catch (std::exception &e) {
+		std::cout << "exc: " << e.what() << std::endl;
+	}
+	try {
+		b.at(10);
+	} catch (std::exception &e) {
+		std::cout << "exc: " << e.what() << std::endl;
+	}
+	try {
+		b.reserve(b.get_allocator().max_size() + 1);
+	} catch (std::exception &e) {
+		std::cout << "exc: " << e.what() << std::endl;
+	}
 }
 
 int main()
@@ -347,5 +380,6 @@ int main()
 	pushpop_test();
 	insert_test();
 	operator_test();
+	all_last_test();
 	return (0);
 }

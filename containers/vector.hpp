@@ -164,6 +164,8 @@ namespace ft
 		void resize (size_type n, value_type val = value_type()) {
 			size_type l = _current;
 
+			if (n > max_size())
+				throw std::length_error("vector:: M default append");
 			if (n < _current) {
 				for (; _current > n; _current--)
 					_alloc.destroy(_arr + _current);
@@ -193,7 +195,7 @@ namespace ft
 		}
 
 		void reserve (size_type n) {
-			if (n > max_size())
+			if (n > max_size() || n < 0)
 				throw std::length_error("vector::reserve");
 			if (n < _capacity)
 				return;
@@ -255,7 +257,7 @@ namespace ft
 			for (InputIterator tmp = first; tmp != last; tmp++)
 				n++;
 			if (n > max_size())
-				throw std::length_error("std::bad_alloc");
+				throw std::bad_alloc();
 			if (n > _capacity) {
 				this->clear();
 				_alloc.deallocate(_arr, _capacity);
@@ -271,7 +273,7 @@ namespace ft
 
 		void assign (size_type n, const value_type& val) {
 			if (n > max_size() || n < 0)
-				throw std::length_error("std::bad_alloc");
+				throw std::bad_alloc();
 			if (n > _capacity) {
 				this->clear();
 				_alloc.deallocate(_arr, _capacity);
@@ -341,6 +343,8 @@ namespace ft
 
 		void insert (iterator position, size_type n, const value_type& val) {
 			size_type pos = (&(*position) - _arr);
+			if (n > max_size())
+				throw std::length_error("vector:: M fill insert");
  			if (_current + n >= _capacity) {
 				pointer tmp = _alloc.allocate(_capacity == 0 ? n : _capacity + n * 2);
 				size_type l = 0;

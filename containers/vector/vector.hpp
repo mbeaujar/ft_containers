@@ -1,8 +1,8 @@
 #ifndef __VECTOR_HPP__
 #define __VECTOR_HPP__
 
-#include "iterator.hpp"
-#include "utils.hpp"
+#include "../utils/iterator.hpp"
+#include "../utils/utils.hpp"
 #include <iostream>
 #include <memory>
 #include <string>
@@ -11,8 +11,7 @@
 namespace ft
 {
 	template <typename T, class Alloc = std::allocator<T> >
-	class vector
-	{
+	class vector {
 	public:
 		typedef T 																value_type;
 		typedef Alloc															allocator_type;
@@ -47,30 +46,26 @@ namespace ft
 		//// ----------------------------------- Member Functions
 
 		explicit vector(const allocator_type &alloc = allocator_type())
-		:
-			_alloc(alloc),
-			//_arr(_alloc.allocate(0)),
-			_arr(0),
-			_capacity(0),
-			_current(0)
+			: _alloc(alloc),
+			  //_arr(_alloc.allocate(0)),
+			  _arr(0),
+			  _capacity(0),
+			  _current(0)
 		{}
 
 		explicit vector(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type())
-		:
-			_alloc(alloc),
-			_arr(_alloc.allocate(n)),
-			_capacity(n),
-			_current(n)
+			: _alloc(alloc),
+			  _arr(_alloc.allocate(n)),
+			  _capacity(n),
+			  _current(n)
 		{
 			for (pointer it = _arr; n; n--, it++)
 				_alloc.construct(it, val);
 		}
-        
-	
+
 		template <class InputIterator>
-        vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0)
-        :
-            _alloc(alloc)
+		vector(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type * = 0)
+			: _alloc(alloc)
 		{
 			size_type n = 0;
 			for (InputIterator tmp = first; tmp != last; tmp++)
@@ -82,9 +77,8 @@ namespace ft
 				_alloc.construct(it, *first);
 		}
 
-		vector (const vector& x)
-		:
-			_alloc(x._alloc)
+		vector(const vector &x)
+			: _alloc(x._alloc)
 		{
 			typename ft::vector<T>::const_iterator first = x.begin();
 			typename ft::vector<T>::const_iterator last = x.end();
@@ -97,9 +91,8 @@ namespace ft
 			_current = n;
 			for (pointer it = _arr; first != last; first++, it++)
 				_alloc.construct(it, *first);
-
 		}
-		
+
 		~vector() {
 			this->clear();
 			_alloc.deallocate(_arr, _capacity);

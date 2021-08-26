@@ -65,19 +65,17 @@ namespace ft
 	public:
 		// ------------------ Constructor
 		reverse_iterator()
-		:
-			_it(0)
+			: _it(0)
 		{}
 
 		explicit reverse_iterator(iterator_type it)
-		:
-			_it(it)
+			: _it(it)
 		{}
 
- 		template <class Iter> reverse_iterator(const reverse_iterator<Iter>& rev_it) 
-		:
-			_it(rev_it.base())
-		{} 
+		template <class Iter>
+		reverse_iterator(const reverse_iterator<Iter> &rev_it)
+			: _it(rev_it.base())
+		{}
 
 		// ----------------------------
 
@@ -110,7 +108,6 @@ namespace ft
 			_it -= n;
 			return *this;
 		}
-
 
 		reverse_iterator operator-(difference_type n) const {
 			return reverse_iterator(_it + n);
@@ -213,18 +210,15 @@ namespace ft
 
 	public:
 		random_access_iterator()
-		:
-			_ptr(0)
+			: _ptr(0)
 		{}
 
 		random_access_iterator(pointer p)
-		:
-			_ptr(p)
+			: _ptr(p)
 		{}
 
 		random_access_iterator(random_access_iterator const &copy)
-		:
-			_ptr(copy._ptr)
+			: _ptr(copy._ptr)
 		{}
 
 		random_access_iterator& operator=(random_access_iterator const &copy) {

@@ -1,37 +1,28 @@
-NAME = a.out
+NAME = ft_containers
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 RM = rm -f
 CC = clang++
 
-SRCS = main.cpp
+PATH_VECTOR= containers/vector
+SRCS_VECTOR =  containers/vector/main.cpp containers/vector/std.cpp
+OBJS_VECTOR = $(SRCS_VECTOR:.cpp=.o)
 
-OBJS = $(SRCS:.cpp=.o)
+%.o : %.cpp
+	@$(CC) $(CFLAGS) $< -c -o $@
 
-%.o : %.cpp	
-	$(CC) $(CFLAGS) $< -c -o $@
+all: $(NAME)
 
-all : $(NAME)
+$(NAME): vector
 
-$(NAME) : $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $@
+vector: $(OBJS_VECTOR)
+	@$(CC) $(CFLAGS) $(PATH_VECTOR)/main.o -o $(PATH_VECTOR)/main
+	@$(CC) $(CFLAGS) $(PATH_VECTOR)/std.o -o $(PATH_VECTOR)/std
+	@./$(PATH_VECTOR)/main > $(PATH_VECTOR)/output
+	@./$(PATH_VECTOR)/std  > $(PATH_VECTOR)/output_expected
+	@diff $(PATH_VECTOR)/output $(PATH_VECTOR)/output_expected
 
-clean : 
-	$(RM) $(OBJS)
 
-fclean : clean
-	$(RM) $(NAME)
+clean :
+	$(RM) $(OBJS_VECTOR) $(PATH_VECTOR)/main $(PATH_VECTOR)/std $(PATH_VECTOR)/output $(PATH_VECTOR)/output_expected
 
-push :
-	git push git@github.com:mbeaujar/ft_containers.git
 
-copy : 
-	@cat main.cpp | sed 's/ft/std/g' > std.cpp
-
-test : copy
-	@clang++ main.cpp -o test1 && ./test1 > a
-	@clang++ std.cpp -o test2 && ./test2 > b
-	@-rm -rf test1 test2
-	@-diff a b 
-	@-rm -rf a b
-
-re : fclean all

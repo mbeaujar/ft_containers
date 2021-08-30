@@ -1,12 +1,15 @@
 #include "stack.hpp"
 #include <stack>
 
+
+// test avec un autre container en paramètre dans la template
+
 void test_constructor()
 {
 	ft::stack<int> a;
-	//std::deque<int> container;
-	//ft::stack<int> b(container);
-	ft::stack<int> b;
+	ft::vector<int> container;
+	ft::stack<int> b(container);
+	//ft::stack<int> b;
 
 	a.push(10);
 	std::cout << a.top() << std::endl;

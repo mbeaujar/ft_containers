@@ -4,9 +4,9 @@
 void test_constructor()
 {
 	std::stack<int> a;
-	//std::deque<int> container;
-	//std::stack<int> b(container);
-	std::stack<int> b;
+	std::deque<int> container;
+	std::stack<int> b(container);
+	//std::stack<int> b;
 
 	a.push(10);
 	std::cout << a.top() << std::endl;

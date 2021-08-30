@@ -176,6 +176,8 @@ namespace ft
 					else
 						root->getparent()->setright(tmp);
 				}
+				else
+					tmp->setparent(NULL);
 				if (root == _root) {
 					if (root->getleft())
 						_root = root->getleft();
@@ -214,6 +216,8 @@ namespace ft
 				if (tmp->getparent()->getright() == root)
 					tmp->getparent()->setright(tmp);
 			}
+			else 
+				tmp->setparent(NULL);
  			if (root == _root)
 				_root = tmp;
 			std::cout << "to clear: " << root->getnode().first << std::endl;

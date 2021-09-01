@@ -3,10 +3,74 @@
 
 #include <iostream>
 #include "utils.hpp"
+#include "iterator.hpp"
 #include <memory>
 
 namespace ft 
 {
+
+	struct bidirectional_iterator_tag {};
+
+	template <typename T, class Compare = ft::less<T> >
+	class BST_iterator : private ft::iterator<bidirectional_iterator_tag, T> {
+		public:
+			typedef typename T::value_type													value_type;
+			typedef typename ft::iterator<bidirectional_iterator_tag, value_type>::pointer			pointer;
+			typedef typename ft::iterator<bidirectional_iterator_tag, value_type>::reference			reference;
+			typedef typename ft::iterator<bidirectional_iterator_tag, value_type>::difference_type	difference_type;
+			typedef typename ft::iterator<bidirectional_iterator_tag, value_type>::iterator_category iterator_category;
+		
+			BST_iterator()
+				: _ptr(0)
+			{}
+
+			BST_iterator(pointer p)
+				: _ptr(p)
+			{}
+
+			BST_iterator(BST_iterator const &copy)
+				: _ptr(copy._ptr)
+			{}
+
+			~BST_iterator() {}
+
+			BST_iterator& operator=(BST_iterator const &copy) {
+				if (this == &copy)
+					return *this;
+				_ptr = copy._ptr;
+				return *this;
+			}
+
+			//BST_iterator
+
+			bool operator==(BST_iterator const &rhs) { return _ptr->getnode() == rhs._ptr->getnode(); }
+
+			bool operator!=(BST_iterator const &rhs) { return _ptr->getnode() != rhs._ptr->getnode(); }
+
+			reference operator*() const { return _ptr->getnode(); }
+
+			pointer operator->() const { return &(operator*()); }
+
+			BST_iterator& operator++() {
+				pointer curr = _ptr;
+
+				if (_ptr->getright()) {
+					_ptr = _ptr->getright();
+					while (_ptr->getleft())
+						_ptr = _ptr->getleft();
+				}
+				else
+				{
+					if (_ptr->getparent())
+						_ptr = _ptr->getparent();
+				}
+				return *this;
+			}
+		
+		private:
+			pointer _ptr;
+	};
+
 	template <typename T>
 	class Node {
 	public:
@@ -85,6 +149,8 @@ namespace ft
 		typedef typename allocator_type::const_reference	const_reference;
 		typedef typename allocator_type::pointer 			pointer;
 		typedef typename allocator_type::const_pointer 		const_pointer;
+		typedef typename allocator_type::size_type			size_type;
+		typedef typename ft::BST_iterator<Node>				iterator;
 
 		BST(const allocator_type &alloc = allocator_type())
 			: _alloc(alloc),
@@ -114,12 +180,43 @@ namespace ft
 		void printTree(void) {
 			printTree("", _root, false);
 		}
-	
+
+		bool empty() const {
+			return _root == NULL;
+		}
+
+		size_type size() const {
+			return this->sizeBST(_root);
+		}
+
+		iterator begin() const {
+			pointer tmp = _root;
+
+			while (tmp->getleft())
+				tmp = tmp->getleft();
+			return iterator(tmp);
+		}
+
+		iterator end() {
+			pointer tmp = _root;
+			
+			while(tmp->getright())
+				tmp = tmp->getright();
+			return iterator(tmp);
+		}
+
 	private:
 		allocator_type _alloc;
 		pointer _root;
 
-		void printTree(std::string prefix, pointer root, bool isLeft)
+
+		size_type sizeBST(pointer root) const {
+			if (root == NULL)
+				return 0;
+			return 1 + sizeBST(root->getleft()) + sizeBST(root->getright());
+		}
+
+ 		void printTree(std::string prefix, pointer root, bool isLeft)
 		{
 			if (root != NULL)
 			{
@@ -220,8 +317,6 @@ namespace ft
 				tmp->setparent(NULL);
  			if (root == _root)
 				_root = tmp;
-			std::cout << "to clear: " << root->getnode().first << std::endl;
-			std::cout << "new: " << tmp->getnode().first << std::endl;
 			_alloc.destroy(root);
 			_alloc.deallocate(root, 1);
 		}
@@ -257,7 +352,6 @@ namespace ft
 		void clearNode(pointer root) {
 			if (root == NULL)
 				return;
-			std::cout << "clear: " << root->getnode().first << std::endl;
 			if (root->getleft())
 				clearNode(root->getleft());
 			if (root->getright())

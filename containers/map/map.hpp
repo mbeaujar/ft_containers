@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "../utils/utils.hpp"
+#include "../utils/BST.hpp"
 #include <memory>
 
 namespace ft
@@ -32,7 +33,7 @@ namespace ft
 	
 	private:
 		allocator_type _alloc;
-
+		ft::BST<value_type, Compare, allocator_type> _bst;
 	};
 };
 

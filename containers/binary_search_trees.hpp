@@ -11,7 +11,7 @@ namespace ft
 	struct bidirectional_iterator_tag {};
 
 	template <typename T, class Compare = ft::less<T> >
-	class BST_iterator : private ft::iterator<bidirectional_iterator_tag, T> {
+	class bidirectional_iterator : private ft::iterator<bidirectional_iterator_tag, T> {
 		public:
 			typedef typename T::value_type													value_type;
 			typedef typename ft::iterator<bidirectional_iterator_tag, value_type>::pointer			pointer;
@@ -19,49 +19,71 @@ namespace ft
 			typedef typename ft::iterator<bidirectional_iterator_tag, value_type>::difference_type	difference_type;
 			typedef typename ft::iterator<bidirectional_iterator_tag, value_type>::iterator_category iterator_category;
 		
-			BST_iterator()
+			bidirectional_iterator()
 				: _ptr(0)
 			{}
 
-			BST_iterator(T *p)
+			bidirectional_iterator(T *p)
 				: _ptr(p)
 			{}
 
-			BST_iterator(BST_iterator const &copy)
+			bidirectional_iterator(bidirectional_iterator const &copy)
 				: _ptr(copy._ptr)
 			{}
 
-			~BST_iterator() {}
+			~bidirectional_iterator() {}
 
-			BST_iterator& operator=(BST_iterator const &copy) {
+			bidirectional_iterator& operator=(bidirectional_iterator const &copy) {
 				if (this == &copy)
 					return *this;
 				_ptr = copy._ptr;
 				return *this;
 			}
 
-			//BST_iterator
+			//bidirectional_iterator
 
-			bool operator==(BST_iterator const &rhs) { return _ptr->data == rhs._ptr->data; }
+			bool operator==(bidirectional_iterator const &rhs) { return _ptr->data == rhs._ptr->data; }
 
-			bool operator!=(BST_iterator const &rhs) { return _ptr->data != rhs._ptr->data; }
+			bool operator!=(bidirectional_iterator const &rhs) { return _ptr->data != rhs._ptr->data; }
 
 			reference operator*() const { return _ptr->data; }
 
 			pointer operator->() const { return &(operator*()); }
 
-			BST_iterator& operator++() {
+			bidirectional_iterator& operator++() {
 				if (_ptr->right) {
 					_ptr = _ptr->right;
 					while (_ptr->left)
 						_ptr = _ptr->left;
-				}
-				else
-				{
+				} else {
 					if (_ptr->parent)
 						_ptr = _ptr->parent;
 				}
 				return *this;
+			}
+
+			bidirectional_iterator operator++(int) {
+				bidirectional_iterator tmp(*this);
+				operator++();
+				return tmp;
+			}
+
+			bidirectional_iterator& operator--() {
+				if (_ptr->left) {
+					_ptr = _ptr->left;
+					while (_ptr->right)
+						_ptr = _ptr->right;
+				} else {
+					if (_ptr->parent)
+						_ptr = _ptr->parent;
+				}
+				return *this;
+			}
+
+			bidirectional_iterator operator--(int) {
+				bidirectional_iterator tmp(*this);
+				operator--();
+				return tmp;
 			}
 		
 		private:
@@ -118,7 +140,7 @@ namespace ft
 		typedef typename allocator_type::const_pointer 		const_pointer;
 		typedef typename allocator_type::difference_type	difference_type;
 		typedef typename allocator_type::size_type			size_type;
-		typedef typename ft::BST_iterator<Node>				iterator;
+		typedef typename ft::bidirectional_iterator<Node>				iterator;
 
 		binary_search_trees(const allocator_type &alloc = allocator_type(), const key_compare &comp = key_compare())
 			:  _alloc(alloc),

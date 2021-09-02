@@ -52,17 +52,10 @@ int main()
 	std::cout << "end: " << ite->first << std::endl;
 	for (; it != ite; ++it)
 		std::cout << it->first << std::endl;
-	std::cout << "size: " << a.size() << std::endl;
 	std::cout << "------------------------" << std::endl;
-
-/* 	std::map<int, int> b;
-	b.insert(std::pair<int, int>(5, 10));
-	b.insert(std::pair<int, int>(6, 10));
-	b.insert(std::pair<int, int>(3, 10));
-	std::map<int, int>::iterator f = b.begin();
-	std::map<int, int>::iterator l = b.end();
-	std::cout << "end: " << l->first << std::endl;
-	for (; f != l; f++)
-		std::cout << f->first << std::endl; */
+	ft::binary_search_trees<value_type>::iterator f = a.begin();
+	std::cout << f->first << std::endl;
+	std::cout << "------------------------" << std::endl;
+	a.printTree();
 	return 0;
 }

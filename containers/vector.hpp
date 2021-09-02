@@ -1,8 +1,8 @@
 #ifndef __VECTOR_HPP__
 #define __VECTOR_HPP__
 
-#include "../utils/iterator.hpp"
-#include "../utils/utils.hpp"
+#include "iterator.hpp"
+#include "utils.hpp"
 #include <iostream>
 #include <memory>
 #include <string>

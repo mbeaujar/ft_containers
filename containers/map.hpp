@@ -2,8 +2,8 @@
 #define __MAP_HPP__
 
 #include <iostream>
-#include "../utils/utils.hpp"
-#include "../utils/BST.hpp"
+#include "utils.hpp"
+#include "binary_search_trees.hpp"
 #include <memory>
 
 namespace ft
@@ -30,10 +30,13 @@ namespace ft
 		typedef typename allocator_type::const_reference	const_reference;
 		typedef typename allocator_type::pointer 			pointer;
 		typedef typename allocator_type::const_pointer 		const_pointer;
+		typedef typename allocator_type::difference_type	difference_type;
+		typedef typename allocator_type::size_type			size_type;								
 	
 	private:
-		allocator_type _alloc;
-		ft::BST<value_type, Compare, allocator_type> _bst;
+		allocator_type 				_alloc;
+		key_compare					_comp;
+
 	};
 };
 

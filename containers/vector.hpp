@@ -434,16 +434,14 @@ namespace ft
 			pointer tmp_arr 			= x._arr;
 			size_type tmp_capacity 		= x._capacity;
 			size_type tmp_current 		= x._current;
-
-			x._alloc = this->_alloc;
-			x._arr =  this->_arr;
-			x._capacity =  this->_capacity;
-			x._current = this->_current;
-
-			this->_alloc 	= tmp_alloc;
-			this->_arr 		= tmp_arr;
-			this->_capacity = tmp_capacity;
-			this->_current 	= tmp_current;
+			x._alloc 					= this->_alloc;
+			x._arr 						= this->_arr;
+			x._capacity 				= this->_capacity;
+			x._current 					= this->_current;
+			this->_alloc 				= tmp_alloc;
+			this->_arr 					= tmp_arr;
+			this->_capacity 			= tmp_capacity;
+			this->_current 				= tmp_current;
 		}
 
 		void clear() {

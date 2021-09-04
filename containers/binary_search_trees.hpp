@@ -98,11 +98,11 @@ namespace ft
 			iterator it = x.begin();
 			iterator ite = x.end();
 			for (; it != ite; ++it)
-				this->insert(*it);
+				this->insert(_root, *it);
 		}
 
 		~binary_search_trees() {
-			clearNode(_root);
+			clear();
 		}
 
 		binary_search_trees& operator=(binary_search_trees &x) {
@@ -116,7 +116,7 @@ namespace ft
 			iterator it = x.begin();
 			iterator ite = x.end();
 			for (; it != ite; ++it)
-				this->insert(*it);
+				this->insert(_root, *it);
 			return *this;
 		}
 
@@ -153,12 +153,13 @@ namespace ft
 
 		// ----------------------------------------  Element access
 
-		iterator search(key_type const &n) { return iterator(searchNode(_root, n)); }
+		iterator search(key_type const &n) { return searchNode(_root, n); }
+
 
 		pointer searchNode(pointer root, key_type const &n) {
 			if (root == NULL || root == _last)
 				return NULL;
-			if (root->data.first == n)
+			if (_comp(root->data.first, n) == false && _comp(n, root->data.first) == false)
 				return root;
 			if (_comp(n, root->data.first))
 				return searchNode(root->left, n);
@@ -247,6 +248,10 @@ namespace ft
 			}
 		}
 
+		void clear() {
+			clearNode(_root);
+		}
+
 		void clearNode(pointer root) {
 			if (root == NULL)
 				return;
@@ -262,6 +267,25 @@ namespace ft
 		// --------------------------------------------  Allocator
 
 		allocator_type get_allocator() const { return allocator_type(); }
+
+
+		void swap(binary_search_trees &x) {
+			allocator_type 	tmp_alloc	= x._alloc; 
+			pointer 		tmp_root 	= x._root;
+			pointer			tmp_last 	= x._last;
+			key_compare		tmp_comp 	= x._comp;
+			size_type		tmp_size 	= x._size;
+			x._alloc					= this->_alloc;
+			x._root 					= this->_root;
+			x._last 					= this->_last;
+			x._comp 					= this->_comp;
+			x._size 					= this->_size;
+			this->_alloc 				= tmp_alloc;
+			this->_root 				= tmp_root;
+			this->_last 				= tmp_last;
+			this->_comp 				= tmp_comp;
+			this->_size 				= tmp_size;
+		}
 
 	private:
 		allocator_type 	_alloc;

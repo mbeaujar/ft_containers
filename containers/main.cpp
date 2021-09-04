@@ -91,5 +91,6 @@ int main()
 	d.insert(value_type(60, 20));
 	std::cout << d.size() << std::endl;
 	d.erase(d.begin());
+	std::cout << d.find(60)->first << std::endl;
 	return 0;
 }

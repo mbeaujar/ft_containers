@@ -115,9 +115,97 @@ namespace ft
 			_bst.removeNode(position);
 		}
 	
-		/*size_type erase (const key_type& k);
+		size_type erase (const key_type& k) {
+			iterator position = _bst.seach(k);
+			if (!position)
+				return 0;
+			_bst.removeNode(position);
+			return 1;
+		}
      	
-		void erase (iterator first, iterator last);*/
+		void erase (iterator first, iterator last) {
+			for (; first != last; first++)
+				_bst.removeNode(first);
+		}
+
+		void swap(map& x) {
+			if (this == &x)
+				return;
+			allocator_type tmp_alloc 	= x._alloc;
+			key_compare tmp_comp 		= x._comp; 
+			x._alloc 					= this->_alloc;
+			x._comp 					= this->_comp;
+			this->_alloc 				= tmp_alloc;
+			this->_comp 				= tmp_comp;
+			_bst.swap(x._bst);
+		}
+
+		void clear() { _bst.clear(); }
+
+		// ----------------------------- Observers
+
+		key_compare key_comp() const { return _comp; }
+
+		value_compare value_comp() const { return value_compare(key_compare()); }
+
+		// --------------------------------- Operations 
+
+		iterator find(const key_type& k) {
+			iterator position = _bst.search(k);
+			if (!position)
+				return _bst.end();
+			return position;
+		}
+
+		const_iterator find(const key_type& k) const {
+			const_iterator position = _bst.search(k);
+			if (!position)
+				return _bst.end();
+			return position;
+		}
+
+ 		size_type count(const key_type& k) const { return search(k) ? 1 : 0; } 
+
+		iterator lower_bound(const key_type& k) {
+			iterator it = _bst.begin();
+			iterator ite = _bst.end();
+			while (it != ite && _comp(it->first, k))
+				it++;
+			return it;
+		}
+
+		const_iterator lower_bound(const key_type& k) const {
+			const_iterator it = _bst.begin();
+			const_iterator ite = _bst.end();
+			while (it != ite && _comp(it->first, k))
+				it++;
+			return it;
+		}
+
+		iterator upper_bound(const key_type& k) {
+			iterator it = _bst.begin();
+			iterator ite = _bst.end();
+			while (it != ite && _comp(k, it->first))
+				it++;
+			return it;
+		}
+
+		const_iterator upper_bound(const key_type& k) const {
+			const_iterator it = _bst.begin();
+			const_iterator ite = _bst.end();
+			while (it != ite && _comp(k, it->first))
+				it++;
+			return it;
+		}
+
+		ft::pair<const_iterator, const_iterator> equal_range(const key_type& k) const { return ft::make_pair(lower_bound(k), upper_bound(k)); }
+
+		ft::pair<iterator, iterator> equal_range(const key_type& k) { return ft::make_pair(lower_bound(k), upper_bound(k)); }
+
+		// --------------------- Allocator
+
+		allocator_type get_allocator() const { return _bst.get_allocator(); }
+		
 
 	private:
 		allocator_type 										_alloc;

@@ -102,7 +102,9 @@ namespace ft
 		}
 
 		~binary_search_trees() {
-			clear();
+			if (_root != _last)
+				clear();
+			deallocateNode(_last);
 		}
 
 		binary_search_trees& operator=(binary_search_trees &x) {
@@ -155,7 +157,6 @@ namespace ft
 
 		iterator search(key_type const &n) { return searchNode(_root, n); }
 
-
 		pointer searchNode(pointer root, key_type const &n) {
 			if (root == NULL || root == _last)
 				return NULL;
@@ -182,25 +183,33 @@ namespace ft
 		// ----------------------------------------- Modifiers
 
 
-		iterator insert(iterator position, const value_type& val) {
+ 		iterator insert(iterator position, const value_type& val) {
+			if (_root == _last)
+				return insertNode(_root, val);
 			if (_comp(position->first, val.first)) {
 				while (_comp(position->first, val.first) && *position != _last->data)
 					position++;
 				if (position->first == val.first)
 					return position;
-				return iterator(insertNode(--position, val));
+				--position;
+				if (position.base()->parent)
+					return insertNode(position.base()->parent, val);
+				return insertNode(position, val);
 			} else {
 				while (_comp(val.first, position->first) && *position != _root->data)
 					position--;
 				if (position->first == val.first)
 					return position;
-				return iterator(insertNode(--position, val));
+				++position;
+				if (position.base()->parent)
+					return insertNode(position.base()->parent, val);
+				return insertNode(position, val);
 			}
 			return position;
-		}
+		} 
 
 		void removeNode(pointer root) {
-			if (root == _last || root == NULL)
+			if (root == _last || root == NULL || _root == _last)
 				return;
 			if (root->left == root->right)
 				return remove_node_with_no_branch_below(root);
@@ -250,18 +259,17 @@ namespace ft
 
 		void clear() {
 			clearNode(_root);
+			_root = _last;
 		}
 
 		void clearNode(pointer root) {
-			if (root == NULL)
+			if (root == NULL || root == _last)
 				return;
-			if (root->left && root != _last)
+			if (root->left)
 				clearNode(root->left);
-			if (root->right && root != _last)
+			if (root->right)
 				clearNode(root->right);
-			_size--;
-			_alloc.destroy(root);
-			_alloc.deallocate(root, 1);
+			deallocateNode(root);
 		}
 
 		// --------------------------------------------  Allocator
@@ -287,6 +295,8 @@ namespace ft
 			this->_size 				= tmp_size;
 		}
 
+		pointer getRoot() const { return _root; }
+
 	private:
 		allocator_type 	_alloc;
 		pointer 		_root;
@@ -303,9 +313,7 @@ namespace ft
 				}
 				if (root == _root)
 					_root = _last;
-				_size--;
-				_alloc.destroy(root);
-				_alloc.deallocate(root, 1);
+			deallocateNode(root);
 		}
 
 		void remove_node_with_one_branch_below(pointer root) {
@@ -330,9 +338,7 @@ namespace ft
 					else
 						_root = root->right;
 				}
-				_size--;
-				_alloc.destroy(root);
-				_alloc.deallocate(root, 1);
+			deallocateNode(root);
 		}
 
 		void remove_node_with_two_branch_below(pointer root) {
@@ -368,6 +374,10 @@ namespace ft
 				tmp->parent = NULL;
  			if (root == _root)
 				_root = tmp;
+			deallocateNode(root);
+		}
+
+		void deallocateNode(pointer root) {
 			_size--;
 			_alloc.destroy(root);
 			_alloc.deallocate(root, 1);

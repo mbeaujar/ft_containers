@@ -37,6 +37,8 @@ namespace ft
 				return *this;
 			}
 
+			T* base() const { return _ptr; }
+
 			//bidirectional_iterator
 
 			bool operator==(bidirectional_iterator const &rhs) { return _ptr->data == rhs._ptr->data; }
@@ -53,6 +55,8 @@ namespace ft
 					while (_ptr->left)
 						_ptr = _ptr->left;
 				} else {
+					while  (_ptr->parent && _ptr->parent->right == _ptr)
+						_ptr = _ptr->parent;
 					if (_ptr->parent)
 						_ptr = _ptr->parent;
 				}
@@ -70,7 +74,9 @@ namespace ft
 					_ptr = _ptr->left;
 					while (_ptr->right)
 						_ptr = _ptr->right;
-				} else {
+				}  else {
+					while  (_ptr->parent && _ptr->parent->left == _ptr)
+						_ptr = _ptr->parent;
 					if (_ptr->parent)
 						_ptr = _ptr->parent;
 				}

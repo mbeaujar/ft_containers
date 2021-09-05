@@ -75,6 +75,11 @@ namespace ft
 
 		const_iterator end() const { return _bst.end(); }
 
+		//reverse_iterator rbegin();
+		//const_reverse_iterator rbegin() const;
+
+		//reverse_iterator rend();
+		//const_reverse_iterator rend() const;
 
 
 		// ------------------ Capacity
@@ -98,8 +103,8 @@ namespace ft
   		pair<iterator,bool> insert (const value_type& val) {
 			iterator tmp = _bst.search(val.first);
 			if (tmp)
-				return ft::make_pair(iterator(tmp), false);
-			iterator position = _bst.insert(_bst.begin(), val);
+				return ft::make_pair(tmp, false);
+			iterator position = _bst.insertNode(_bst.getRoot(), val);
 			return ft::make_pair(position, true);
 		} 
 
@@ -107,7 +112,7 @@ namespace ft
 
 		template <class InputIterator>
   		void insert (InputIterator first, InputIterator last) {
-			  for (; first != last; first++)
+			  for (; first != last; ++first)
 			  	_bst.insert(_bst.begin(), *first);
 		}
     
@@ -116,7 +121,7 @@ namespace ft
 		}
 	
 		size_type erase (const key_type& k) {
-			iterator position = _bst.seach(k);
+			iterator position = _bst.search(k);
 			if (!position)
 				return 0;
 			_bst.removeNode(position);
@@ -124,8 +129,8 @@ namespace ft
 		}
      	
 		void erase (iterator first, iterator last) {
-			for (; first != last; first++)
-				_bst.removeNode(first);
+			while (first != last)
+				_bst.removeNode(first++);
 		}
 
 		void swap(map& x) {
@@ -185,7 +190,7 @@ namespace ft
 		iterator upper_bound(const key_type& k) {
 			iterator it = _bst.begin();
 			iterator ite = _bst.end();
-			while (it != ite && _comp(k, it->first))
+			while (it != ite && _comp(k, it->first) == false)
 				it++;
 			return it;
 		}
@@ -193,7 +198,7 @@ namespace ft
 		const_iterator upper_bound(const key_type& k) const {
 			const_iterator it = _bst.begin();
 			const_iterator ite = _bst.end();
-			while (it != ite && _comp(k, it->first))
+			while (it != ite && _comp(k, it->first) == false)
 				it++;
 			return it;
 		}
@@ -206,6 +211,8 @@ namespace ft
 
 		allocator_type get_allocator() const { return _bst.get_allocator(); }
 		
+		// debug
+		//void printBST() { _bst.printBST(); }
 
 	private:
 		allocator_type 										_alloc;

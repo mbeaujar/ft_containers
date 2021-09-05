@@ -61,6 +61,8 @@ namespace ft
 		typedef typename allocator_type::size_type						size_type;
 		typedef typename ft::bidirectional_iterator<Node>				iterator;
 		typedef typename ft::bidirectional_iterator<const Node>			const_iterator;
+		typedef typename ft::reverse_iterator<iterator> 				reverse_iterator;
+		typedef typename ft::reverse_iterator<const_iterator> 			const_reverse_iterator;
 
 
 		// --------------------------------------- Members functions
@@ -143,6 +145,26 @@ namespace ft
 		iterator end() { return iterator(_last); }
 
 		const_iterator end() const { return const_iterator(_last); }
+
+		reverse_iterator rbegin() { return reverse_iterator(_last); }
+		
+		const_reverse_iterator rbegin() const { return const_reverse_iterator(_last); }
+
+		reverse_iterator rend() {
+			pointer tmp = _root;
+
+			while (tmp->left)
+				tmp = tmp->left;
+			return reverse_iterator(tmp);
+		}
+
+		const_reverse_iterator rend() const {
+			pointer tmp = _root;
+
+			while (tmp->left)
+				tmp = tmp->left;
+			return const_reverse_iterator(tmp);
+		}
 
 
 		// -------------------------------------- Capacity 

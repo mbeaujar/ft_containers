@@ -33,8 +33,8 @@ namespace ft
 		typedef typename allocator_type::const_pointer 								const_pointer;
 		typedef typename ft::binary_search_trees<value_type, key_compare>::iterator 		iterator;
 		typedef typename ft::binary_search_trees<value_type, key_compare>::const_iterator 	const_iterator;
-		// reverse_iterator
-		// const_reverse_iterator
+		typedef typename ft::binary_search_trees<value_type, key_compare>::reverse_iterator reverse_iterator;
+		typedef typename ft::binary_search_trees<value_type, key_compare>::const_reverse_iterator const_reverse_iterator;
 		typedef typename allocator_type::difference_type	difference_type;
 		typedef typename allocator_type::size_type			size_type;								
 
@@ -75,11 +75,13 @@ namespace ft
 
 		const_iterator end() const { return _bst.end(); }
 
-		//reverse_iterator rbegin();
-		//const_reverse_iterator rbegin() const;
+		reverse_iterator rbegin() { return _bst.rbegin(); }
+		
+		const_reverse_iterator rbegin() const { return _bst.rbegin(); }
 
-		//reverse_iterator rend();
-		//const_reverse_iterator rend() const;
+		reverse_iterator rend() { return _bst.rend(); }
+		
+		const_reverse_iterator rend() const { return _bst.rend(); }
 
 
 		// ------------------ Capacity

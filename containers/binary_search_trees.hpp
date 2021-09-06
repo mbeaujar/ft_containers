@@ -89,7 +89,7 @@ namespace ft
 			_root->right = _last;
 		}
 
-		binary_search_trees(binary_search_trees &x)
+		binary_search_trees(binary_search_trees const &x)
 			: _alloc(x._alloc),
 			  _comp(x._comp),
 			  _size(0)
@@ -97,10 +97,10 @@ namespace ft
 			_last = _alloc.allocate(1);
 			_alloc.construct(_last, Node(T()));
 			_root = _last;
-			iterator it = x.begin();
-			iterator ite = x.end();
+			const_iterator it = x.begin();
+			const_iterator ite = x.end();
 			for (; it != ite; ++it)
-				this->insert(_root, *it);
+				this->insertNode(_root, it.base()->data);
 		}
 
 		~binary_search_trees() {
@@ -109,18 +109,18 @@ namespace ft
 			deallocateNode(_last);
 		}
 
-		binary_search_trees& operator=(binary_search_trees &x) {
+		binary_search_trees& operator=(binary_search_trees const &x) {
 			if (this == &x)
 				return *this;
-			clearNode(_root);
-			_last = _alloc.allocate(1);
-			_alloc.construct(_last, Node(T()));
+			clear();
+			_alloc = x._alloc;
+			_comp = x._comp;
 			_root = _last;
 			_size = 0;
-			iterator it = x.begin();
-			iterator ite = x.end();
-			for (; it != ite; ++it)
-				this->insert(_root, *it);
+			const_iterator it = x.begin();
+			const_iterator ite = x.end();
+			for (; it != ite; it++)
+				this->insertNode(_root, it.base()->data);
 			return *this;
 		}
 
@@ -179,6 +179,18 @@ namespace ft
 
 		iterator search(key_type const &n) { return searchNode(_root, n); }
 
+		iterator search(key_type const &n) const { return searchNode(_root, n); }
+
+		pointer searchNode(pointer root, key_type const &n) const {
+			if (root == NULL || root == _last)
+				return NULL;
+			if (_comp(root->data.first, n) == false && _comp(n, root->data.first) == false)
+				return root;
+			if (_comp(n, root->data.first))
+				return searchNode(root->left, n);
+			return searchNode(root->right, n);
+		}
+
 		pointer searchNode(pointer root, key_type const &n) {
 			if (root == NULL || root == _last)
 				return NULL;
@@ -209,36 +221,28 @@ namespace ft
 			if (_root == _last)
 				return insertNode(_root, val);
 			if (_comp(position->first, val.first)) {
-				while (_comp(position->first, val.first) && *position != _last->data)
+				iterator last(_last);
+				while (_comp(position->first, val.first) && position != last)
 					position++;
 				if (position->first == val.first)
 					return position;
 				--position;
 				if (position.base()->parent)
 					return insertNode(position.base()->parent, val);
-				return insertNode(position, val);
+				return insertNode(_root, val);
 			} else {
-				while (_comp(val.first, position->first) && *position != _root->data)
+				iterator root(_root);
+				while (_comp(val.first, position->first) && position != root)
 					position--;
 				if (position->first == val.first)
 					return position;
 				++position;
 				if (position.base()->parent)
 					return insertNode(position.base()->parent, val);
-				return insertNode(position, val);
+				return insertNode(_root, val);
 			}
 			return position;
 		} 
-
-		void removeNode(pointer root) {
-			if (root == _last || root == NULL || _root == _last)
-				return;
-			if (root->left == root->right)
-				return remove_node_with_no_branch_below(root);
-			if (root->left == NULL || root->right == NULL)
-				return remove_node_with_one_branch_below(root);
-			return remove_node_with_two_branch_below(root);
-		}
 
 		pointer insertNode(pointer root, value_type const &n) {
 			if (_root == NULL || _root == _last) {
@@ -279,8 +283,20 @@ namespace ft
 			}
 		}
 
+		void removeNode(pointer root) {
+			if (root == _last || root == NULL || _root == _last)
+				return;
+			if (root->left == root->right)
+				return remove_node_with_no_branch_below(root);
+			if (root->left == NULL || root->right == NULL)
+				return remove_node_with_one_branch_below(root);
+			return remove_node_with_two_branch_below(root);
+		}
+
+
 		void clear() {
-			clearNode(_root);
+			if (_root != _last)
+				clearNode(_root);
 			_root = _last;
 		}
 

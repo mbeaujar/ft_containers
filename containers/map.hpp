@@ -19,6 +19,7 @@ namespace ft
 
 		class value_compare : std::binary_function<value_type, value_type, bool> {
 		public:
+			friend class map;
 			bool operator()( const value_type& lhs, const value_type& rhs ) const
 			{ return comp(lhs.first, rhs.first); }
 		protected:
@@ -59,10 +60,19 @@ namespace ft
 		map (const map& x)
 			:  _alloc(x._alloc),
 			   _comp(x._comp),
-			   _bst()
-		{ _bst = x._bst; }
+			   _bst(x._bst)
+		{}
 
 		~map() {}
+
+		map& operator= (const map& x) {
+			if (this == &x)
+				return *this;
+			_alloc = x._alloc;
+			_comp = x._comp;
+			_bst = x._bst;
+			return *this;
+		}
 
 
 		// ------------------------- Iterators
@@ -98,7 +108,7 @@ namespace ft
 		mapped_type& operator[] (const key_type& k) {
 			iterator tmp = _bst.search(k);
 			if (!tmp)
-				tmp = _bst.insert(_bst.begin(), ft::make_pair(k, mapped_type()));
+				tmp = _bst.insertNode(_bst.getRoot(), ft::make_pair(k, mapped_type()));
 			return tmp->second;
 		}
 
@@ -171,7 +181,7 @@ namespace ft
 			return position;
 		}
 
- 		size_type count(const key_type& k) const { return search(k) ? 1 : 0; } 
+ 		size_type count(const key_type& k) const { return _bst.search(k) ? 1 : 0; } 
 
 		iterator lower_bound(const key_type& k) {
 			iterator it = _bst.begin();

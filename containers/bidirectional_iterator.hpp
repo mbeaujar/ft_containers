@@ -25,7 +25,7 @@ namespace ft
 				: _ptr(p)
 			{}
 
-			// for const_reverse_iterator // bullshit, 0 logic 
+			// for const_reverse_iterator, the dumbest thing i have done
 			template <typename A, bool B, class C>
 			bidirectional_iterator(bidirectional_iterator<A, B, C> const &copy, typename ft::enable_if<!B>::type* = 0)
 				: _ptr(copy.base())

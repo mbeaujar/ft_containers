@@ -601,13 +601,175 @@ void map_iterators()
     ft::map<int, int>::const_reverse_iterator n4 = a.rend();
     for (i = 0; n3 != n4; n3++, i++)
         std::cout << "#" << i << " " << n3->first << " " << n3->second << std::endl;
-     
+    n1 = a.rbegin();
+    n3 = a.rbegin();
+    if (n1 == n3)
+        std::cout << "n1 is equal to n3" << std::endl;
+    n3++;
+    if (n1 != n3)
+        std::cout << "n1 is not equal to n3" << std::endl;
+
+    std::cout << std::endl;
+    std::cout << " -------------- CAPACITY MAP --------------------" << std::endl;
+    std::cout << ">> empty / size" << std::endl;
+    ft::map<int, int> p1;
+    std::cout << "p1 is empty: " << std::boolalpha << p1.empty() << std::endl;
+    std::cout << "p1 size: " << p1.size() << std::endl;
+    p1.insert(ft::make_pair(25, 5));
+    std::cout << "p1 is empty: " << std::boolalpha << p1.empty() << std::endl;
+    std::cout << "p1 size: " << p1.size() << std::endl;
+    std::cout << "p1 max_size: " << p1.max_size() << std::endl;
+
+    std::cout << std::endl;
+    std::cout << ">> operator access element " << std::endl;
+    ft::map<int, int> p2;
+    std::cout << "p2 is empty: " << p2.empty() << std::endl;
+    std::cout << "p2[10] : " << p2[10] << std::endl;
+    p2[10] = 5;
+    std::cout << "p2[10] : " << p2[10] << std::endl;
+    p2.insert(ft::make_pair(25, 88));
+    std::cout << "p2[25] : " << p2[25] << std::endl;
+    std::cout << std::endl;
+}
+
+void map_modifiers()
+{
+    std::cout << " -------------- MODIFIERS MAP --------------------" << std::endl;
+    std::cout << ">> insert" << std::endl;
+    ft::map<int, int> a;
+    std::cout << "a size: " << a.size() << std::endl;
+    a.insert(ft::make_pair(25, 8));
+    printmap(a);
+
+    a.insert(a.begin(), ft::make_pair(10, 25));
+    printmap(a);
+
+    a.insert(ft::make_pair(75, 10));
+    a.insert(ft::make_pair(76, 10));
+    a.insert(ft::make_pair(77, 10));
+    a.insert(ft::make_pair(78, 10));
+    a.insert(ft::make_pair(79, 10));
+    ft::map<int,int> b(a.begin(), a.end());
+    printmap(b);
+
+    std::cout << ">> erase" << std::endl;
+    b.erase(b.begin());
+    printmap(b);
+
+
+    b.erase(77);
+    printmap(b);
+
+    b.erase(b.begin(), b.end());
+    printmap(b);
+
+    b.insert(ft::make_pair(10, 10));
+    std::cout << ">> swap" << std::endl;
+    std::cout << "> before swap:" << std::endl; 
+    printmap(b);
+    printmap(a);
+    a.swap(b);
+    std::cout << "> after swap:" << std::endl;
+    printmap(b); 
+    printmap(a);
+
+    std::cout << ">> clear" << std::endl;
+    a.clear();
+    std::cout << "a size: " << a.size() << std::endl;
+    ft::map<int, int> c(b);
+    b.clear();
+
+    std::cout << ">> key_comp" << std::endl;
+    ft::map<int, int>::key_compare comp = c.key_comp();
+    ft::map<int, int>::iterator t1 = c.begin();
+    ft::map<int, int>::iterator t2 = c.begin();
+    t2++;
+    std::cout << "comp t1 and t2 : " << comp(t1->first, t2->first) << std::endl;
+
+    std::cout << ">> value_comp " << std::endl;
+
+    std::cout << "value_comp t1 and t2 : " << c.value_comp()(*t1, *t2) << std::endl;
+    std::cout << std::endl;
+}
+
+void map_operations()
+{
+    std::cout << " -------------- OPERATIONS MAP --------------------" << std::endl;
+    std::cout << ">> find" << std::endl;
+    ft::map<char, int> mymap;
+
+    mymap['a'] = 50;
+    mymap['b'] = 100;
+    mymap['c'] = 150;
+    mymap['d'] = 200;
+
+    std::cout << "find 'a' : " << mymap.find('a')->second << std::endl;
+    std::cout << "find 'b' : " << mymap.find('b')->second << std::endl;
+    std::cout << "find 'c' : " << mymap.find('c')->second << std::endl;
+    std::cout << "find 'd' : " << mymap.find('d')->second << std::endl;
+    if (mymap.find('z') == mymap.end())
+        std::cout << "cannot find 'z'" << std::endl;
+    std::cout << std::endl;
+    std::cout << ">> count" << std::endl;
+    std::cout << "count 'a' : " << mymap.count('a') << std::endl;
+    std::cout << "count 'b' : " << mymap.count('b') << std::endl;
+    std::cout << "count 'z' : " << mymap.count('z') << std::endl;
+
+    std::cout << std::endl;
+    std::cout << ">> lower_bound / upper_bound" << std::endl;
+    ft::map<char, int> m;
+    ft::map<char, int>::iterator itlow, itup;
+
+    m['a'] = 20;
+    m['b'] = 40;
+    m['c'] = 60;
+    m['d'] = 80;
+    m['e'] = 100;
+
+    itlow = m.lower_bound('b'); // itlow points to b
+    itup = m.upper_bound('d');  // itup points to e (not d!)
+
+    m.erase(itlow, itup); // erases [itlow,itup)
+
+    // print content:
+    for (ft::map<char, int>::iterator it = m.begin(); it != m.end(); ++it)
+        std::cout << it->first << " => " << it->second << '\n';
+    m.clear();
+    itlow = m.lower_bound('b'); // itlow points to b
+    itup = m.upper_bound('d');  // itup points to e (not d!)
+    for (ft::map<char, int>::iterator it = m.begin(); it != m.end(); ++it)
+        std::cout << it->first << " => " << it->second << '\n';
+
+    std::cout << std::endl;
+    std::cout << ">> equal_range" << std::endl;
+    ft::map<char, int> i;
+
+    i['a'] = 10;
+    i['b'] = 20;
+    i['c'] = 30;
+
+    ft::pair<ft::map<char, int>::iterator, ft::map<char, int>::iterator> ret;
+    ret = i.equal_range('b');
+
+    std::cout << "lower bound points to: ";
+    std::cout << ret.first->first << " => " << ret.first->second << '\n';
+
+    std::cout << "upper bound points to: ";
+    std::cout << ret.second->first << " => " << ret.second->second << '\n';
+
+    std::cout << std::endl;
+    std::cout << ">> get_allocator" << std::endl;
+
+    std::cout << "max_size : " << i.get_allocator().max_size() << std::endl;
 }
 
 int map()
 {
     map_constructor();
     map_iterators();
+    map_modifiers();
+    map_operations();
+    std::cout << std::endl;
     return 0;
 }
 

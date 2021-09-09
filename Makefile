@@ -21,7 +21,7 @@ $(NAME_FT) : $(OBJS_FT)
 	@$(CC) $(OBJS_FT) -o $@
 
 $(OBJS_STD) : main.cpp
-	@$(CC) $(CFLAGS) -I$(INC) -D FT=1 -c $< -o $@
+	@$(CC) $(CFLAGS) -I$(INC) -c $< -o $@
 
 $(NAME_STD) : $(OBJS_STD)
 	@$(CC) $(OBJS_STD) -o $@

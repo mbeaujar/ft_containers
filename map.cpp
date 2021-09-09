@@ -2,76 +2,6 @@
 #include "map.hpp"
 #include <map>
 
-/* int main()
-{
-	ft::map<int, int> a;
-
-	a.insert(ft::make_pair(10, 5));
- 	a.insert(ft::make_pair(5, 5));
-	a.insert(ft::make_pair(8, 5));
-	a.insert(ft::make_pair(12, 5));
-	//a.printBST();
-	a.insert(ft::make_pair(15, 5));
-	a.insert(ft::make_pair(13, 5));
-	a.insert(ft::make_pair(14, 5));
-	a.insert(ft::make_pair(20, 5));
-	a.insert(ft::make_pair(19, 5));
-	a.insert(ft::make_pair(50, 5));
-	a.insert(ft::make_pair(0, 5));
-	
-	
-	//a.printBST();
-	int i = 0;
- 	ft::map<int, int>::iterator it = a.begin();
-	ft::map<int, int>::iterator ite = a.end();
- 	for (; it != ite; i++, it++)
-		std::cout << it->first << std::endl;
-	
-	std::cout << "--------------------------" << std::endl;
-
-	it = a.begin();
-	ite = a.end();
-	--ite;
-	for (; i > 0; --ite, i--)
-		std::cout << ite->first << std::endl;
-
-	a.clear();
-  	a.insert(a.begin(), ft::make_pair(10, 5));
-	std::cout << a.begin()->first << std::endl; 
-	std::cout << "erase: " << a.erase(10) << std::endl;
-	std::cout << "erase: " << a.erase(10) << std::endl;
-	std::cout << "erase: " << a.erase(10) << std::endl;
-	a.erase(a.begin(), a.end());
-	a.clear();
-	a.insert(ft::make_pair(10, 5));
-	a.insert(ft::make_pair(8, 5));
-	a.insert(ft::make_pair(5, 5));
-	a.insert(ft::make_pair(28, 5));
-	a.insert(ft::make_pair(12, 5));
-	std::cout << "size: " << a.size() << std::endl;
-	//a.erase(a.begin(), a.end());
-	ite = a.end();
-	--ite;
-	a.erase(a.begin(), ite);
-	std::cout << "size a: " << a.size() << std::endl;
-	ft::map<int, int> b;
-	std::cout << "size b: " << b.size() << std::endl;
-	b.swap(a);
-	std::cout << "size a: " << a.size() << std::endl;
-	std::cout << "size b: " << b.size() << std::endl;
-	std::cout << b[28] << std::endl;
-	std::cout << b.max_size() << std::endl;
-	std::cout << b.get_allocator().max_size() << std::endl;
-	a.clear();
-	a.insert(ft::make_pair(10, 5));
-	a.insert(ft::make_pair(8, 5));
-	a.insert(ft::make_pair(5, 5));
-	a.insert(ft::make_pair(28, 5));
-	a.insert(ft::make_pair(12, 5));
-	std::cout << a.lower_bound(8)->first << std::endl;
-	return 0;
-} */
-
 bool fncomp (char lhs, char rhs) {return lhs<rhs;}
 
 struct classcomp {
@@ -381,6 +311,7 @@ int empty ()
 
   return 0;
 }
+
 int operator_assignation()
 {
   ft::map<char,int> first;
@@ -405,7 +336,7 @@ int operator_assignation()
 
 int main()
 {
-/*   ft::map<int, int> a;
+  ft::map<int, int> a;
   
   a.insert(a.begin(), ft::make_pair(10, 5));
   a.insert(a.end(), ft::make_pair(8, 5));
@@ -440,7 +371,7 @@ int main()
   erase();
   insert();
   operator_access_element();
-  empty(); */
+  empty();
   operator_assignation();
   return 0;
 }

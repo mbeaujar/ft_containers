@@ -27,15 +27,15 @@ namespace ft
 		typedef typename allocator_type::size_type								size_type;
 
 	private:
-		allocator_type _alloc;
-		pointer _arr;
-		size_type _capacity;
-		size_type _current;
+		allocator_type	_alloc;
+		pointer 		_arr;
+		size_type 		_capacity;
+		size_type 		_current;
 
 
 		// solution -> https://stackoverflow.com/questions/10510077/size-t-convert-cast-to-string-in-c
 		template <typename tostring>
-		std::string to_string(tostring n)
+		std::string to_string(tostring n) const
 		{
 			std::ostringstream ss;
 			ss << n;
@@ -170,7 +170,7 @@ namespace ft
 			size_type l = _current;
 
 			if (n > max_size())
-				throw std::length_error("vector:: M default append");
+				throw std::length_error("vector::_M_fill_insert");
 			if (n < _current) {
 				for (; _current > n; _current--)
 					_alloc.destroy(_arr + _current);
@@ -309,7 +309,8 @@ namespace ft
 		}
 
 		void pop_back() {
-			_alloc.destroy(_arr + --_current);
+			if (_current > 0)
+				_alloc.destroy(_arr + --_current);
 		}
  
 		iterator insert (iterator position, const value_type& val) {

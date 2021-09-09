@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <deque>
-#if 0 //CREATE A REAL STL EXAMPLE
+#if 1 //CREATE A REAL STL EXAMPLE
 	#include <map>
 	#include <stack>
 	#include <vector>
@@ -62,12 +62,10 @@ int main(int argc, char** argv) {
 	ft::stack<Buffer, std::deque<int> > stack_deq_buffer;
 	ft::map<int, int> map_int;
 
-	std::cout << "1" << std::endl;
 	for (int i = 0; i < COUNT; i++)
 	{
 		vector_buffer.push_back(Buffer());
 	}
-	std::cout << "2" << std::endl;
 
 	for (int i = 0; i < COUNT; i++)
 	{
@@ -75,7 +73,6 @@ int main(int argc, char** argv) {
 		vector_buffer[idx].idx = 5;
 	}
 	ft::vector<Buffer>().swap(vector_buffer);
-	std::cout << "3" << std::endl;
 
 	try
 	{
@@ -90,13 +87,11 @@ int main(int argc, char** argv) {
 	{
 		//NORMAL ! :P
 	}
-	std::cout << "4" << std::endl;
 	
 	for (int i = 0; i < COUNT; ++i)
 	{
 		map_int.insert(ft::make_pair(rand(), rand()));
 	}
-	std::cout << "5" << std::endl;
 
 	int sum = 0;
 	for (int i = 0; i < 10000; i++)
@@ -105,14 +100,10 @@ int main(int argc, char** argv) {
 		sum += map_int[access];
 	}
 	std::cout << "should be constant with the same seed: " << sum << std::endl;
-	std::cout << "6" << std::endl;
-	
-/* 	{
+
+	{
 		ft::map<int, int> copy = map_int;
-	} */
-
-	std::cout << "7" << std::endl;
-
+	}
 	MutantStack<char> iterable_stack;
 	for (char letter = 'a'; letter <= 'z'; letter++)
 		iterable_stack.push(letter);

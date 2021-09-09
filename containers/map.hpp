@@ -12,10 +12,10 @@ namespace ft
 	class map {
 		typedef typename ft::binary_search_trees<ft::pair<const Key, T>, Compare>::pointer pointerBST;
 	public:
-		typedef Key 										key_type;
-		typedef T 											mapped_type;
-		typedef ft::pair<const key_type, mapped_type> 		value_type;
-		typedef Compare 									key_compare;
+		typedef Key 																				key_type;
+		typedef T 																					mapped_type;
+		typedef ft::pair<const key_type, mapped_type> 												value_type;
+		typedef Compare 																			key_compare;
 
 		class value_compare : std::binary_function<value_type, value_type, bool> {
 		public:
@@ -27,17 +27,17 @@ namespace ft
 			value_compare( Compare c ) : comp(c) {}
 		};
 
-		typedef Allocator 															allocator_type;
-		typedef typename allocator_type::reference 									reference;
-		typedef typename allocator_type::const_reference							const_reference;
-		typedef typename allocator_type::pointer 									pointer;
-		typedef typename allocator_type::const_pointer 								const_pointer;
-		typedef typename ft::binary_search_trees<value_type, key_compare>::iterator 		iterator;
-		typedef typename ft::binary_search_trees<value_type, key_compare>::const_iterator 	const_iterator;
-		typedef typename ft::binary_search_trees<value_type, key_compare>::reverse_iterator reverse_iterator;
-		typedef typename ft::binary_search_trees<value_type, key_compare>::const_reverse_iterator const_reverse_iterator;
-		typedef typename allocator_type::difference_type	difference_type;
-		typedef typename allocator_type::size_type			size_type;								
+		typedef Allocator 																			allocator_type;
+		typedef typename allocator_type::reference 													reference;
+		typedef typename allocator_type::const_reference											const_reference;
+		typedef typename allocator_type::pointer 													pointer;
+		typedef typename allocator_type::const_pointer 												const_pointer;
+		typedef typename ft::binary_search_trees<value_type, key_compare>::iterator 				iterator;
+		typedef typename ft::binary_search_trees<value_type, key_compare>::const_iterator 			const_iterator;
+		typedef typename ft::binary_search_trees<value_type, key_compare>::reverse_iterator 		reverse_iterator;
+		typedef typename ft::binary_search_trees<value_type, key_compare>::const_reverse_iterator 	const_reverse_iterator;
+		typedef typename allocator_type::difference_type											difference_type;
+		typedef typename allocator_type::size_type													size_type;								
 
 		// ----------------------- Members functions
 
@@ -54,7 +54,7 @@ namespace ft
 			   _bst()
 		{
 			for (; first != last; first++)
-				_bst.insert(*first);
+				_bst.insertNode(_bst.getRoot(), *first);
 		}
 	
 		map (const map& x)
@@ -106,26 +106,25 @@ namespace ft
 		// ------------------- Element access
 
 		mapped_type& operator[] (const key_type& k) {
-			iterator tmp = _bst.search(k);
-			if (!tmp)
+			iterator tmp;
+			if ((tmp = _bst.search(k)) == _bst.end())
 				tmp = _bst.insertNode(_bst.getRoot(), ft::make_pair(k, mapped_type()));
 			return tmp->second;
 		}
 
   		pair<iterator,bool> insert (const value_type& val) {
-			iterator tmp = _bst.search(val.first);
-			if (tmp)
-				return ft::make_pair(tmp, false);
-			iterator position = _bst.insertNode(_bst.getRoot(), val);
-			return ft::make_pair(position, true);
+			if (_bst.search(val.first) == _bst.end()) {
+				return ft::make_pair(_bst.insertNode(_bst.getRoot(), val), true);
+			}
+			return ft::make_pair(_bst.end(), false);
 		} 
 
 		iterator insert (iterator position, const value_type& val) { return _bst.insert(position, val); }
 
 		template <class InputIterator>
   		void insert (InputIterator first, InputIterator last) {
-			  for (; first != last; ++first)
-			  	_bst.insert(_bst.begin(), *first);
+			  for (; first != last; first++)
+			  	_bst.insertNode(_bst.getRoot(), *first);
 		}
     
 		void erase (iterator position) {
@@ -134,7 +133,7 @@ namespace ft
 	
 		size_type erase (const key_type& k) {
 			iterator position = _bst.search(k);
-			if (!position)
+			if (position == _bst.end())
 				return 0;
 			_bst.removeNode(position);
 			return 1;
@@ -168,20 +167,15 @@ namespace ft
 		// --------------------------------- Operations 
 
 		iterator find(const key_type& k) {
-			iterator position = _bst.search(k);
-			if (!position)
-				return _bst.end();
-			return position;
+			return _bst.search(k);
+
 		}
 
 		const_iterator find(const key_type& k) const {
-			const_iterator position = _bst.search(k);
-			if (!position)
-				return _bst.end();
-			return position;
+			return _bst.search(k);
 		}
 
- 		size_type count(const key_type& k) const { return _bst.search(k) ? 1 : 0; } 
+ 		size_type count(const key_type& k) const { return _bst.search(k) == _bst.end() ? 0 : 1; } 
 
 		iterator lower_bound(const key_type& k) {
 			iterator it = _bst.begin();
@@ -224,7 +218,7 @@ namespace ft
 		allocator_type get_allocator() const { return _bst.get_allocator(); }
 		
 		// debug
-		//void printBST() { _bst.printBST(); }
+		// void printBST() { _bst.printBST(); }
 
 	private:
 		allocator_type 										_alloc;

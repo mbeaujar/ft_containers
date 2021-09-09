@@ -7,10 +7,10 @@ namespace ft
 {
 	struct bidirectional_iterator_tag {};
 
-	template <typename T, class Compare = ft::less<T> >
+	template <typename T, bool isConst, class Compare = ft::less<T> >
 	class bidirectional_iterator : private ft::iterator<bidirectional_iterator_tag, T> {
 		public:
-			typedef typename T::value_type													value_type;
+			typedef typename ft::enable_if_const<isConst, T>::value_type	value_type;
 			typedef typename ft::iterator<bidirectional_iterator_tag, value_type>::pointer			pointer;
 			typedef typename ft::iterator<bidirectional_iterator_tag, value_type>::reference			reference;
 			typedef typename ft::iterator<bidirectional_iterator_tag, value_type>::difference_type	difference_type;
@@ -20,7 +20,7 @@ namespace ft
 				: _ptr(0)
 			{}
 
-			bidirectional_iterator(T *p)
+			bidirectional_iterator(T* p)
 				: _ptr(p)
 			{}
 
@@ -45,7 +45,7 @@ namespace ft
 
 			bool operator!=(bidirectional_iterator const &rhs) { return _ptr->data != rhs._ptr->data; }
 
-			reference operator*() const { return _ptr->data; }
+			value_type& operator*() const { return _ptr->data; }
 
 			pointer operator->() const { return &(operator*()); }
 
@@ -89,7 +89,7 @@ namespace ft
 				return tmp;
 			}
 
-			//operator bidirectional_iterator<const T>() { return bidirectional_iterator<const T>(_ptr); }
+			operator bidirectional_iterator<const T, true, Compare>() { return bidirectional_iterator<const T, true, Compare>(_ptr); }
 			operator T*() { return _ptr; }
 		private:
 			T* _ptr;

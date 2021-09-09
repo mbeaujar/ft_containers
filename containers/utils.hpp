@@ -143,6 +143,15 @@ namespace ft {
     {
         bool operator() (const T& x, const T& y) const { return (x < y); }
     };
+
+
+	// --------------------- isConst
+
+	template <bool isConst, typename T>
+	struct enable_if_const { typedef typename T::value_type value_type; };
+
+	template <typename T>
+	struct enable_if_const<true, T> { typedef const typename T::value_type value_type; };
 };
 
 #endif

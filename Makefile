@@ -1,40 +1,45 @@
-NAME = ft_containers
+NAME_FT = ft
+NAME_STD = std
+INC = containers
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 RM = rm -f
 CC = clang++
 
-PATH_VECTOR= containers/vector
-SRCS_VECTOR =  containers/vector/main.cpp containers/vector/std.cpp
-OBJS_VECTOR = $(SRCS_VECTOR:.cpp=.o)
 
-PATH_STACK= containers/stack
-SRCS_STACK= containers/stack/main.cpp containers/stack/std.cpp
-OBJS_STACK = $(SRCS_STACK:.cpp=.o)
+SRCS = main.cpp
 
-%.o : %.cpp
-	@$(CC) $(CFLAGS) $< -c -o $@
+OBJS_FT = ft.o 
 
-all: $(NAME)
+OBJS_STD = std.o
 
-$(NAME): vector stack
+all : $(NAME_FT) $(NAME_STD)
 
-vector: $(OBJS_VECTOR)
-	@-$(CC) $(CFLAGS) $(PATH_VECTOR)/main.o -o $(PATH_VECTOR)/main
-	@-$(CC) $(CFLAGS) $(PATH_VECTOR)/std.o -o $(PATH_VECTOR)/std
-	@-./$(PATH_VECTOR)/main > $(PATH_VECTOR)/output
-	@-./$(PATH_VECTOR)/std  > $(PATH_VECTOR)/output_expected
-	@-diff $(PATH_VECTOR)/output $(PATH_VECTOR)/output_expected
+$(OBJS_FT) : main.cpp
+	@$(CC) $(CFLAGS) -I$(INC) -D FT=1 -c $< -o $@
 
-stack: $(OBJS_STACK)
-	@-$(CC) $(CFLAGS) $(PATH_STACK)/main.o -o $(PATH_STACK)/main
-	@-$(CC) $(CFLAGS) $(PATH_STACK)/std.o -o $(PATH_STACK)/std
-	@-./$(PATH_STACK)/main > $(PATH_STACK)/output
-	@-./$(PATH_STACK)/std  > $(PATH_STACK)/output_expected
-	@-diff $(PATH_STACK)/output $(PATH_STACK)/output_expected
+$(NAME_FT) : $(OBJS_FT)
+	@$(CC) $(OBJS_FT) -o $@
 
+$(OBJS_STD) : main.cpp
+	@$(CC) $(CFLAGS) -I$(INC) -D FT=1 -c $< -o $@
+
+$(NAME_STD) : $(OBJS_STD)
+	@$(CC) $(OBJS_STD) -o $@
+
+comp : $(NAME_FT) $(NAME_STD)
+	@-./ft > output_ft
+	@-./std > output_std
+	@-diff output_ft output_std
 
 clean :
-	@-$(RM) $(OBJS_VECTOR) $(PATH_VECTOR)/main $(PATH_VECTOR)/std $(PATH_VECTOR)/output $(PATH_VECTOR)/output_expected
-	@-$(RM) $(OBJS_STACK) $(PATH_STACK)/main $(PATH_STACK)/std $(PATH_STACK)/output $(PATH_STACK)/output_expected
+	@$(RM) $(OBJS_FT) $(OBJS_STD)
+	@$(RM) output_ft output_std
+
+fclean : clean
+	@$(RM) $(NAME_FT) $(NAME_STD)
+
+re : fclean all
+
+
 
 

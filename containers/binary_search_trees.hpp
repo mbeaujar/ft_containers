@@ -59,8 +59,8 @@ namespace ft
 		typedef const Node* 											const_pointer;
 		typedef typename allocator_type::difference_type				difference_type;
 		typedef typename allocator_type::size_type						size_type;
-		typedef typename ft::bidirectional_iterator<Node>				iterator;
-		typedef typename ft::bidirectional_iterator<const Node>			const_iterator;
+		typedef typename ft::bidirectional_iterator<Node, false, Compare>				iterator;
+		typedef typename ft::bidirectional_iterator<const Node, true, Compare>				const_iterator;
 		typedef typename ft::reverse_iterator<iterator> 				reverse_iterator;
 		typedef typename ft::reverse_iterator<const_iterator> 			const_reverse_iterator;
 
@@ -166,7 +166,6 @@ namespace ft
 			return const_reverse_iterator(tmp);
 		}
 
-
 		// -------------------------------------- Capacity 
 
 		bool empty() const { return _size == 0; }
@@ -177,30 +176,21 @@ namespace ft
 
 		// ----------------------------------------  Element access
 
-		iterator search(key_type const &n) { return searchNode(_root, n); }
-
-		iterator search(key_type const &n) const { return searchNode(_root, n); }
-
-		pointer searchNode(pointer root, key_type const &n) const {
-			if (root == NULL || root == _last)
-				return NULL;
-			if (_comp(root->data.first, n) == false && _comp(n, root->data.first) == false)
-				return root;
-			if (_comp(n, root->data.first))
-				return searchNode(root->left, n);
-			return searchNode(root->right, n);
+		iterator search(key_type const &n) const {
+			pointer root = _root;
+			while (root->left != NULL || root->right != NULL) {
+				if (_comp(root->data.first, n) == false && _comp(n, root->data.first) == false)
+					return root;
+				if (_comp(n, root->data.first)) 
+					root = root->left;
+				else
+					root = root->right;
+				if (root == NULL)
+					break;
+			}
+			return _last;
 		}
 
-		pointer searchNode(pointer root, key_type const &n) {
-			if (root == NULL || root == _last)
-				return NULL;
-			if (_comp(root->data.first, n) == false && _comp(n, root->data.first) == false)
-				return root;
-			if (_comp(n, root->data.first))
-				return searchNode(root->left, n);
-			return searchNode(root->right, n);
-		}
-		
 		void printBST() { printBST("", _root, false); } 
 
  		void printBST(std::string prefix, pointer root, bool isLeft)
@@ -214,6 +204,7 @@ namespace ft
 				printBST(prefix + (isLeft ? "│   " : "    "), root->right, false);
 			}
 		}
+
 		// ----------------------------------------- Modifiers
 
 
@@ -242,7 +233,7 @@ namespace ft
 				return insertNode(_root, val);
 			}
 			return position;
-		} 
+		}
 
 		pointer insertNode(pointer root, value_type const &n) {
 			if (_root == NULL || _root == _last) {
@@ -253,34 +244,38 @@ namespace ft
 				_size++;
 				return _root;
 			}
-			if (_comp(n.first, root->data.first)) { 
-				if (root->left)
-					return insertNode(root->left, n);
-				else {
-					Node* newNode = _alloc.allocate(1);
-					_alloc.construct(newNode, Node(n));
-					root->left = newNode;
-					newNode->parent = root;
-					_size++;
-					return newNode;
-				}
-			}
-			else {
-				if (root->right && root->right != _last)
-					return insertNode(root->right, n);
-				else {
-					Node* newNode = _alloc.allocate(1);
-					_alloc.construct(newNode, Node(n));
-					if (root->right == _last) {
-						newNode->right = _last;
-						_last->parent = newNode;
+			while (1) {
+				if (_comp(n.first, root->data.first)) {
+					if (root->left) {
+						root = root->left;
 					}
-					root->right = newNode;
-					newNode->parent = root;
-					_size++;
-					return newNode;
+					else {
+						Node *newNode = _alloc.allocate(1);
+						_alloc.construct(newNode, Node(n));
+						root->left = newNode;
+						newNode->parent = root;
+						_size++;
+						return newNode;
+					}
+				} else {
+					if (root->right && root->right != _last)
+						root = root->right;
+					else {
+						Node *newNode = _alloc.allocate(1);
+						_alloc.construct(newNode, Node(n));
+						if (root->right == _last)
+						{
+							newNode->right = _last;
+							_last->parent = newNode;
+						}
+						root->right = newNode;
+						newNode->parent = root;
+						_size++;
+						return newNode;
+					}
 				}
 			}
+			return _last;		
 		}
 
 		void removeNode(pointer root) {
@@ -292,7 +287,6 @@ namespace ft
 				return remove_node_with_one_branch_below(root);
 			return remove_node_with_two_branch_below(root);
 		}
-
 
 		void clear() {
 			if (_root != _last)

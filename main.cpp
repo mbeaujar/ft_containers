@@ -596,11 +596,11 @@ void map_iterators()
         std::cout << "#" << i << " " << n1->first << " " << n1->second << std::endl;
 
     std::cout << std::endl;
-    // std::cout << ">> const reverse iterators" << std::endl;
-    // ft::map<int, int>::const_reverse_iterator n3 = a.rbegin();
-    // ft::map<int, int>::const_reverse_iterator n4 = a.rend();
-    // for (i = 0; n3 != n4; n3++, i++)
-    //     std::cout << "#" << i << " " << n3->first << " " << n3->second << std::endl;
+    std::cout << ">> const reverse iterators" << std::endl;
+    ft::map<int, int>::const_reverse_iterator n3 = a.rbegin();
+    ft::map<int, int>::const_reverse_iterator n4 = a.rend();
+    for (i = 0; n3 != n4; n3++, i++)
+        std::cout << "#" << i << " " << n3->first << " " << n3->second << std::endl;
      
 }
 

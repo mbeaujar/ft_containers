@@ -20,12 +20,15 @@ namespace ft
 				: _ptr(0)
 			{}
 
+		
 			bidirectional_iterator(T* p)
 				: _ptr(p)
 			{}
 
-			bidirectional_iterator(bidirectional_iterator const &copy)
-				: _ptr(copy._ptr)
+			// for const_reverse_iterator // bullshit, 0 logic 
+			template <typename A, bool B, class C>
+			bidirectional_iterator(bidirectional_iterator<A, B, C> const &copy, typename ft::enable_if<!B>::type* = 0)
+				: _ptr(copy.base())
 			{}
 
 			~bidirectional_iterator() {}

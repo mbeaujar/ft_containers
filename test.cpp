@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <deque>
-#if 1 //CREATE A REAL STL EXAMPLE
+#if 0 //CREATE A REAL STL EXAMPLE
 	#include <map>
 	#include <stack>
 	#include <vector>
@@ -100,10 +100,11 @@ int main(int argc, char** argv) {
 		sum += map_int[access];
 	}
 	std::cout << "should be constant with the same seed: " << sum << std::endl;
-
+	// std::cout << "map_int : " << map_int.size() << std::endl;
 	{
 		ft::map<int, int> copy = map_int;
 	}
+	// std::cout << "non" << std::endl;
 	MutantStack<char> iterable_stack;
 	for (char letter = 'a'; letter <= 'z'; letter++)
 		iterable_stack.push(letter);

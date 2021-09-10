@@ -53,15 +53,16 @@ namespace ft
 			   _comp(comp),
 			   _bst()
 		{
-			for (; first != last; first++)
-				_bst.insertNode(_bst.getRoot(), *first);
+			this->insert(first, last);
 		}
 	
 		map (const map& x)
 			:  _alloc(x._alloc),
 			   _comp(x._comp),
-			   _bst(x._bst)
-		{}
+			   _bst()
+		{
+			this->insert(x.begin(), x.end());
+		}
 
 		~map() {}
 
@@ -70,7 +71,8 @@ namespace ft
 				return *this;
 			_alloc = x._alloc;
 			_comp = x._comp;
-			_bst = x._bst;
+			_bst.clear();
+			this->insert(x.begin(), x.end());
 			return *this;
 		}
 
@@ -122,11 +124,15 @@ namespace ft
 		iterator insert (iterator position, const value_type& val) { return _bst.insert(position, val); }
 
 		template <class InputIterator>
-  		void insert (InputIterator first, InputIterator last) {
-			  for (; first != last; first++)
-			  	_bst.insertNode(_bst.getRoot(), *first);
+		void insert(InputIterator first, InputIterator last) {
+			iterator pos = _bst.getRoot();
+			for (; first != last; first++) {
+				pos = _bst.insertNode(pos, *first);
+				if (pos.base()->parent)
+					pos = pos.base()->parent;
+			}
 		}
-    
+
 		void erase (iterator position) {
 			_bst.removeNode(position);
 		}

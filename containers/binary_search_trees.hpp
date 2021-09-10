@@ -99,20 +99,21 @@ namespace ft
 			_root = _last;
 			const_iterator it = x.begin();
 			const_iterator ite = x.end();
-			for (; it != ite; ++it)
-				this->insertNode(_root, it.base()->data);
+			for (; it != ite; it++) {
+				//std::cout << "it : " << it->first << std::endl;
+				this->insertNode(_root, *it);
+			}
 		}
 
 		~binary_search_trees() {
-			if (_root != _last)
-				clear();
+			clear();
 			deallocateNode(_last);
 		}
 
 		binary_search_trees& operator=(binary_search_trees const &x) {
 			if (this == &x)
 				return *this;
-			clear();
+			this->clear();
 			_alloc = x._alloc;
 			_comp = x._comp;
 			_root = _last;
@@ -120,7 +121,7 @@ namespace ft
 			const_iterator it = x.begin();
 			const_iterator ite = x.end();
 			for (; it != ite; it++)
-				this->insertNode(_root, it.base()->data);
+				this->insertNode(_root, *it);
 			return *this;
 		}
 
@@ -212,30 +213,34 @@ namespace ft
 			if (_root == _last)
 				return insertNode(_root, val);
 			if (_comp(position->first, val.first)) {
-				iterator last(_last);
+				iterator last = this->end();
 				while (_comp(position->first, val.first) && position != last)
 					position++;
 				if (position->first == val.first)
 					return position;
-				--position;
-				if (position.base()->parent)
-					return insertNode(position.base()->parent, val);
-				return insertNode(_root, val);
+				if (position == last)
+					return insertNode(_root, val);
+				// --position;
+				// if (position.base()->parent)
+					// return insertNode(position.base()->parent, val);
+				return insertNode(position, val);
 			} else {
-				iterator root(_root);
+				iterator root = this->begin();
 				while (_comp(val.first, position->first) && position != root)
 					position--;
 				if (position->first == val.first)
 					return position;
-				++position;
-				if (position.base()->parent)
-					return insertNode(position.base()->parent, val);
-				return insertNode(_root, val);
+				if (position == root)
+					return insertNode(_root, val);
+				// ++position;
+				//if (position.base()->parent)
+				//	return insertNode(position.base()->parent, val);
+				return insertNode(position, val);
 			}
 			return position;
 		}
 
-		pointer insertNode(pointer root, value_type const &n) {
+		iterator insertNode(pointer root, value_type const &n) {
 			if (_root == NULL || _root == _last) {
 				_root = _alloc.allocate(1);
 				_alloc.construct(_root, Node(n));
@@ -257,7 +262,9 @@ namespace ft
 						_size++;
 						return newNode;
 					}
-				} else {
+				} else if (_comp(n.first, root->data.first) == false && _comp(root->data.first, n.first) == false)
+					break; 
+				else {
 					if (root->right && root->right != _last)
 						root = root->right;
 					else {
@@ -289,19 +296,13 @@ namespace ft
 		}
 
 		void clear() {
-			if (_root != _last)
-				clearNode(_root);
-			_root = _last;
+			clearNode(this->begin(), this->end());
 		}
 
-		void clearNode(pointer root) {
-			if (root == NULL || root == _last)
-				return;
-			if (root->left)
-				clearNode(root->left);
-			if (root->right)
-				clearNode(root->right);
-			deallocateNode(root);
+		void clearNode(iterator first, iterator last) {
+			while (first != last)
+				removeNode(first++);
+			_root = _last;
 		}
 
 		// --------------------------------------------  Allocator

@@ -115,10 +115,11 @@ namespace ft
 		}
 
   		pair<iterator,bool> insert (const value_type& val) {
-			if (_bst.search(val.first) == _bst.end()) {
+			iterator pos;
+			if ((pos = _bst.search(val.first)) == _bst.end()) {
 				return ft::make_pair(_bst.insertNode(_bst.getRoot(), val), true);
 			}
-			return ft::make_pair(_bst.end(), false);
+			return ft::make_pair(pos, false);
 		} 
 
 		iterator insert (iterator position, const value_type& val) { return _bst.insert(position, val); }
@@ -153,8 +154,8 @@ namespace ft
 		void swap(map& x) {
 			if (this == &x)
 				return;
-			allocator_type tmp_alloc 	= x._alloc;
-			key_compare tmp_comp 		= x._comp; 
+			allocator_type 	tmp_alloc 	= x._alloc;
+			key_compare 	tmp_comp 	= x._comp; 
 			x._alloc 					= this->_alloc;
 			x._comp 					= this->_comp;
 			this->_alloc 				= tmp_alloc;

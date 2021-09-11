@@ -77,52 +77,9 @@ namespace ft
 			_root = _last;
 		}
 
-		binary_search_trees(const value_type &data, const allocator_type &alloc = allocator_type(), const key_compare &comp = key_compare())
-			:  _alloc(alloc),
-			   _comp(comp),
-			   _size(1)
-		{
-			_root = _alloc.allocate(1);
-			_alloc.construct(_root, Node(data));
-			_last = _alloc.allocate(1);
-			_alloc.construct(_last, Node(T()));
-			_root->right = _last;
-		}
-
-		binary_search_trees(binary_search_trees const &x)
-			: _alloc(x._alloc),
-			  _comp(x._comp),
-			  _size(0)
-		{
-			_last = _alloc.allocate(1);
-			_alloc.construct(_last, Node(T()));
-			_root = _last;
-			const_iterator it = x.begin();
-			const_iterator ite = x.end();
-			for (; it != ite; it++) {
-				//std::cout << "it : " << it->first << std::endl;
-				this->insertNode(_root, *it);
-			}
-		}
-
 		~binary_search_trees() {
 			clear();
 			deallocateNode(_last);
-		}
-
-		binary_search_trees& operator=(binary_search_trees const &x) {
-			if (this == &x)
-				return *this;
-			this->clear();
-			_alloc = x._alloc;
-			_comp = x._comp;
-			_root = _last;
-			_size = 0;
-			const_iterator it = x.begin();
-			const_iterator ite = x.end();
-			for (; it != ite; it++)
-				this->insertNode(_root, *it);
-			return *this;
 		}
 
 		// ---------------------------- Iterators
@@ -192,22 +149,21 @@ namespace ft
 			return _last;
 		}
 
-		void printBST() { printBST("", _root, false); } 
+		// void printBST() { printBST("", _root, false); } 
 
- 		void printBST(std::string prefix, pointer root, bool isLeft)
-		{
-			if (root != NULL && root != _last)
-			{
-				std::cout << prefix;
-				std::cout << (isLeft ? "├──" : "└──");
-				std::cout << root->data.first << std::endl;
-				printBST(prefix + (isLeft ? "│   " : "    "), root->left, true);
-				printBST(prefix + (isLeft ? "│   " : "    "), root->right, false);
-			}
-		}
+ 		// void printBST(std::string prefix, pointer root, bool isLeft)
+		// {
+		// 	if (root != NULL && root != _last)
+		// 	{
+		// 		std::cout << prefix;
+		// 		std::cout << (isLeft ? "├──" : "└──");
+		// 		std::cout << root->data.first << std::endl;
+		// 		printBST(prefix + (isLeft ? "│   " : "    "), root->left, true);
+		// 		printBST(prefix + (isLeft ? "│   " : "    "), root->right, false);
+		// 	}
+		// }
 
 		// ----------------------------------------- Modifiers
-
 
  		iterator insert(iterator position, const value_type& val) {
 			if (_root == _last)
@@ -220,9 +176,6 @@ namespace ft
 					return position;
 				if (position == last)
 					return insertNode(_root, val);
-				// --position;
-				// if (position.base()->parent)
-					// return insertNode(position.base()->parent, val);
 				return insertNode(position, val);
 			} else {
 				iterator root = this->begin();
@@ -232,9 +185,6 @@ namespace ft
 					return position;
 				if (position == root)
 					return insertNode(_root, val);
-				// ++position;
-				//if (position.base()->parent)
-				//	return insertNode(position.base()->parent, val);
 				return insertNode(position, val);
 			}
 			return position;
@@ -378,7 +328,7 @@ namespace ft
 			pointer tmp = root->right;
 			while (tmp->left)
 				tmp = tmp->left;
-			if (tmp->right) {	// update the branch below and above
+			if (tmp->right) {
 				if (tmp->parent->left == tmp)
 					tmp->parent->left = tmp->right;
 				else

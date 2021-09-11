@@ -315,12 +315,6 @@ void vector_modifiers()
     std::cout << ">> pop_back" << std::endl;
     while (c.size() > 0)
         c.pop_back();
-    c.pop_back();
-    c.pop_back();
-    c.pop_back();
-    c.pop_back();
-    c.pop_back();
-    c.pop_back();
     printvector(c);
 
     std::cout << ">> insert" << std::endl;
@@ -341,11 +335,6 @@ void vector_modifiers()
     printvector(d);
     std::cout << "after" << std::endl;
     d.erase(d.begin(), d.end());
-    d.erase(d.begin());
-    d.erase(d.begin());
-    d.erase(d.begin());
-    d.erase(d.begin());
-    d.erase(d.begin());
     printvector(d);
 
     std::cout << ">> swap" << std::endl;
@@ -778,8 +767,8 @@ int map()
 
 int main()
 {
-    //vector();
-    //stack();
+    vector();
+    stack();
     map();
     return 0;
 }

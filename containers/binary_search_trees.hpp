@@ -148,19 +148,19 @@ namespace ft
 			return _last;
 		}
 
-		// void printBST() { printBST("", _root, false); } 
+		void printBST() { printBST("", _root, false); } 
 
- 		// void printBST(std::string prefix, pointer root, bool isLeft)
-		// {
-		// 	if (root != NULL && root != _last)
-		// 	{
-		// 		std::cout << prefix;
-		// 		std::cout << (isLeft ? "├──" : "└──");
-		// 		std::cout << root->data.first << std::endl;
-		// 		printBST(prefix + (isLeft ? "│   " : "    "), root->left, true);
-		// 		printBST(prefix + (isLeft ? "│   " : "    "), root->right, false);
-		// 	}
-		// }
+ 		void printBST(std::string prefix, pointer root, bool isLeft)
+		{
+			if (root != NULL && root != _last)
+			{
+				std::cout << prefix;
+				std::cout << (isLeft ? "├──" : "└──");
+				std::cout << root->data.first << std::endl;
+				printBST(prefix + (isLeft ? "│   " : "    "), root->left, true);
+				printBST(prefix + (isLeft ? "│   " : "    "), root->right, false);
+			}
+		}
 
 		// ----------------------------------------- Modifiers
 
@@ -171,22 +171,22 @@ namespace ft
 				iterator last = this->end();
 				while (_comp(position->first, val.first) && position != last)
 					position++;
-				if (position->first == val.first)
+				if (position != last && _comp(val.first, position->first) == false && _comp(position->first, val.first) == false)
 					return position;
-				if (position == last)
-					return insertNode(_root, val);
+				if (position.base()->parent)
+					return insertNode(position.base()->parent, val);
 				return insertNode(position, val);
-			} else {
+			} else if (_comp(val.first, position->first)) {
 				iterator root = this->begin();
 				while (_comp(val.first, position->first) && position != root)
 					position--;
-				if (position->first == val.first)
+				if (_comp(val.first, position->first) == false && _comp(position->first, val.first) == false)
 					return position;
-				if (position == root)
-					return insertNode(_root, val);
+				if (position.base()->parent)
+					return insertNode(position.base()->parent, val);
 				return insertNode(position, val);
-			}
-			return position;
+			} else
+				return position;
 		}
 
 		iterator insertNode(pointer root, value_type const &n) {
@@ -199,10 +199,11 @@ namespace ft
 				return _root;
 			}
 			while (1) {
+				if (_comp(n.first, root->data.first) == false && _comp(root->data.first, n.first) == false)
+					break;
 				if (_comp(n.first, root->data.first)) {
-					if (root->left) {
+					if (root->left)
 						root = root->left;
-					}
 					else {
 						Node *newNode = _alloc.allocate(1);
 						_alloc.construct(newNode, Node(n));
@@ -211,9 +212,7 @@ namespace ft
 						_size++;
 						return newNode;
 					}
-				} else if (_comp(n.first, root->data.first) == false && _comp(root->data.first, n.first) == false)
-					break; 
-				else {
+				} else {
 					if (root->right && root->right != _last)
 						root = root->right;
 					else {

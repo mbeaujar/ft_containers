@@ -761,98 +761,111 @@ int map()
     return 0;
 }
 
+
 // -------------------------------------------------------------------------------------------------------------
 
-    #define TESTED_NAMESPACE ft
-    #define TESTED_TYPE int
-    #define printSize printvector
-void	checkErase(TESTED_NAMESPACE::vector<TESTED_TYPE> const &vct,
-					TESTED_NAMESPACE::vector<TESTED_TYPE>::const_iterator const &it)
+#include <list>
+
+#define TESTED_NAMESPACE ft
+
+
+
+// -------------------------------------------------------------------------------------------------------------
+
+template <typename T>
+std::string	printPair(const T &iterator, bool nl = true, std::ostream &o = std::cout)
 {
-	static int i = 0;
-	std::cout << "[" << i++ << "] " << "erase: " << it - vct.begin() << std::endl;
-	printSize(vct);
+	o << "key: " << iterator->first << " | value: " << iterator->second;
+	if (nl)
+		o << std::endl;
+	return ("");
 }
 
-void	prepost_incdec(TESTED_NAMESPACE::vector<TESTED_TYPE> &vct)
+template <typename T_MAP>
+void	printSize(T_MAP const &mp, bool print_content = 1)
 {
-	TESTED_NAMESPACE::vector<TESTED_TYPE>::iterator it = vct.begin();
-	TESTED_NAMESPACE::vector<TESTED_TYPE>::iterator it_tmp;
-
-	std::cout << "Pre inc" << std::endl;
-	it_tmp = ++it;
-	std::cout << *it_tmp << " | " << *it << std::endl;
-
-	std::cout << "Pre dec" << std::endl;
-	it_tmp = --it;
-	std::cout << *it_tmp << " | " << *it << std::endl;
-
-	std::cout << "Post inc" << std::endl;
-	it_tmp = it++;
-	std::cout << *it_tmp << " | " << *it << std::endl;
-
-	std::cout << "Post dec" << std::endl;
-	it_tmp = it--;
-	std::cout << *it_tmp << " | " << *it << std::endl;
+	std::cout << "size: " << mp.size() << std::endl;
+	std::cout << "max_size: " << mp.max_size() << std::endl;
+	if (print_content)
+	{
+		typename T_MAP::const_iterator it = mp.begin(), ite = mp.end();
+		std::cout << std::endl << "Content is:" << std::endl;
+		for (; it != ite; ++it)
+			std::cout << "- " << printPair(it, false) << std::endl;
+	}
 	std::cout << "###############################################" << std::endl;
 }
-void	is_empty(TESTED_NAMESPACE::vector<TESTED_TYPE> const &vct)
+
+template <typename T>
+class foo {
+	public:
+		typedef T	value_type;
+
+		foo(void) : value(), _verbose(false) { };
+		foo(value_type src, const bool verbose = false) : value(src), _verbose(verbose) { };
+		foo(foo const &src, const bool verbose = false) : value(src.value), _verbose(verbose) { };
+		~foo(void) { if (this->_verbose) std::cout << "~foo::foo()" << std::endl; };
+		void m(void) { std::cout << "foo::m called [" << this->value << "]" << std::endl; };
+		void m(void) const { std::cout << "foo::m const called [" << this->value << "]" << std::endl; };
+		foo &operator=(value_type src) { this->value = src; return *this; };
+		foo &operator=(foo const &src) {
+			if (this->_verbose || src._verbose)
+				std::cout << "foo::operator=(foo) CALLED" << std::endl;
+			this->value = src.value;
+			return *this;
+		};
+		value_type	getValue(void) const { return this->value; };
+		void		switchVerbose(void) { this->_verbose = !(this->_verbose); };
+
+		operator value_type(void) const {
+			return value_type(this->value);
+		}
+	private:
+		value_type	value;
+		bool		_verbose;
+};
+
+template <typename T>
+std::ostream	&operator<<(std::ostream &o, foo<T> const &bar) {
+	o << bar.getValue();
+	return o;
+}
+
+template <typename T>
+T	inc(T it, int n)
 {
-	std::cout << "is_empty: " << vct.empty() << std::endl;
+	while (n-- > 0)
+		++it;
+	return (it);
+}
+
+template <typename T>
+T	dec(T it, int n)
+{
+	while (n-- > 0)
+		--it;
+	return (it);
 }
 
 
-int main()
+// -------------------------------------------------------------------------------------------------------------
+
+#define T1 char
+#define T2 foo<std::string>
+
+int		main(void)
 {
-    // vector();
-    // stack();
-    // map();
-    // ft::vector<int> a;
-    // // a.insert(a.begin(), 25);
-    // ft::vector<int> b(1, 25);
-    // a.insert(a.begin(), 25);
-    // std::cout << "size: " << a.size() << " capacity empty: " << a.capacity() << std::endl;
-    // for (int i = 0; i < 10; i++) {
-    //     a.insert(a.begin(), b.begin(), b.end());
-    //     std::cout << "size: " << a.size() << " capacity " << i << ": " << a.capacity() << std::endl;
-    // }
+	TESTED_NAMESPACE::map<T1, T2> mp;
 
-	const int start_size = 7;
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(start_size, 20);
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct2;
-	TESTED_NAMESPACE::vector<TESTED_TYPE>::iterator it = vct.begin();
+	mp['a'] = "an element";
+	mp['b'] = "another element";
+	mp['c'] = mp['b'];
+	mp['b'] = "old element";
 
-	for (int i = 2; i < start_size; ++i)
-		it[i] = (start_size - i) * 3;
-	printSize(vct);
+	printSize(mp);
 
-	vct.resize(10, 42);
-	printSize(vct);
+	std::cout << "insert a new element via operator[]: " << mp['d'] << std::endl;
 
-	vct.resize(18, 43);
-	printSize(vct);
-	vct.resize(10);
-	printSize(vct);
-	vct.resize(23, 44);
-	printSize(vct);
-	vct.resize(5);
-	printSize(vct);
-	vct.reserve(5);
-	vct.reserve(3);
-	printSize(vct);
-	vct.resize(87);
-	vct.resize(5);
-	printSize(vct);
-
-	is_empty(vct2);
-	vct2 = vct;
-	is_empty(vct2);
-	vct.reserve(vct.capacity() + 1);
-	printSize(vct);
-	printSize(vct2);
-
-	vct2.resize(0);
-	is_empty(vct2);
-	printSize(vct2);
-    return 0;
+	printSize(mp);
+	return (0);
 }

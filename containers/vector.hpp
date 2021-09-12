@@ -509,6 +509,8 @@ namespace ft
 		typename ft::vector<T, Alloc>::const_iterator it = lhs.begin();
 		typename ft::vector<T, Alloc>::const_iterator first = rhs.begin();
 
+		if (lhs.size() != rhs.size())
+			return false;
 		for (; first != rhs.end() && it != lhs.end(); first++, it++) {
 			if (*first != *it)
 				return false;

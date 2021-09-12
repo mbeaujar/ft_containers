@@ -128,7 +128,7 @@ namespace ft
 		void insert(InputIterator first, InputIterator last) {
 			iterator pos = _bst.getRoot();
 			for (; first != last; first++) {
-				pos = _bst.insertNode(pos, *first);
+				pos = _bst.insert(pos, *first);
 				if (pos.base()->parent)
 					pos = pos.base()->parent;
 			}
@@ -225,13 +225,42 @@ namespace ft
 		allocator_type get_allocator() const { return _bst.get_allocator(); }
 		
 		// debug
-		// void printBST() { _bst.printBST(); }
+		void printBST() { _bst.printBST(); }
 
 	private:
 		allocator_type 										_alloc;
 		key_compare											_comp;
 		ft::binary_search_trees<value_type, key_compare> 	_bst;
 	};
+
+	// a!=b	!(a==b)
+	// a>b	b<a
+	// a<=b	!(b<a)
+	// a>=b	!(a<b)
+
+	template< class Key, class T, class Compare, class Alloc >
+	bool operator==( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs ) {
+		if (lhs.size() != rhs.size())
+			return false;
+		return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+	};
+
+	template< class Key, class T, class Compare, class Alloc >
+	bool operator<( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs ) {
+		return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+	};
+	
+	template< class Key, class T, class Compare, class Alloc >
+	bool operator!=( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs ) { return !(lhs == rhs); };
+
+	template< class Key, class T, class Compare, class Alloc >
+	bool operator<=( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs ) { return !(rhs < lhs); };
+
+	template< class Key, class T, class Compare, class Alloc >
+	bool operator>( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs ) { return rhs < lhs; };
+
+	template< class Key, class T, class Compare, class Alloc >
+	bool operator>=( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs ) { return !(lhs < rhs); };
 };
 
 #endif

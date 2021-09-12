@@ -44,6 +44,7 @@ namespace ft
 		node* left;
 		node* right;
 		node* parent;
+		bool color; // to have the same size as R-B Tree
 	};
 
 	template <typename T, class Compare = ft::less<T>, class Node = node<T>, class Allocator = std::allocator<Node> >
@@ -136,15 +137,13 @@ namespace ft
 
 		iterator search(key_type const &n) const {
 			pointer root = _root;
-			while (root->left != NULL || root->right != NULL) {
+			while (root != NULL) {
 				if (_comp(root->data.first, n) == false && _comp(n, root->data.first) == false)
 					return root;
 				if (_comp(n, root->data.first)) 
 					root = root->left;
 				else
 					root = root->right;
-				if (root == NULL)
-					break;
 			}
 			return _last;
 		}

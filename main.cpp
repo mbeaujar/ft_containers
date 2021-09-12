@@ -22,7 +22,6 @@ struct access {
 };
 
 template <typename T>
-
 void printvector(ft::vector<T> a)
 {
 	typename ft::vector<T>::iterator it;
@@ -764,11 +763,81 @@ int map()
 
 // -------------------------------------------------------------------------------------------------------------
 
+    #define TESTED_NAMESPACE ft
+    #define TESTED_TYPE int
+    #define printSize printvector
+void	checkErase(TESTED_NAMESPACE::vector<TESTED_TYPE> const &vct,
+					TESTED_NAMESPACE::vector<TESTED_TYPE>::const_iterator const &it)
+{
+	static int i = 0;
+	std::cout << "[" << i++ << "] " << "erase: " << it - vct.begin() << std::endl;
+	printSize(vct);
+}
+
+void	prepost_incdec(TESTED_NAMESPACE::vector<TESTED_TYPE> &vct)
+{
+	TESTED_NAMESPACE::vector<TESTED_TYPE>::iterator it = vct.begin();
+	TESTED_NAMESPACE::vector<TESTED_TYPE>::iterator it_tmp;
+
+	std::cout << "Pre inc" << std::endl;
+	it_tmp = ++it;
+	std::cout << *it_tmp << " | " << *it << std::endl;
+
+	std::cout << "Pre dec" << std::endl;
+	it_tmp = --it;
+	std::cout << *it_tmp << " | " << *it << std::endl;
+
+	std::cout << "Post inc" << std::endl;
+	it_tmp = it++;
+	std::cout << *it_tmp << " | " << *it << std::endl;
+
+	std::cout << "Post dec" << std::endl;
+	it_tmp = it--;
+	std::cout << *it_tmp << " | " << *it << std::endl;
+	std::cout << "###############################################" << std::endl;
+}
+void	is_empty(TESTED_NAMESPACE::vector<TESTED_TYPE> const &vct)
+{
+	std::cout << "is_empty: " << vct.empty() << std::endl;
+}
+
 
 int main()
 {
-    vector();
-    stack();
-    map();
+    // vector();
+    // stack();
+    // map();
+    // ft::vector<int> a;
+    // // a.insert(a.begin(), 25);
+    // ft::vector<int> b(1, 25);
+    // a.insert(a.begin(), 25);
+    // std::cout << "size: " << a.size() << " capacity empty: " << a.capacity() << std::endl;
+    // for (int i = 0; i < 10; i++) {
+    //     a.insert(a.begin(), b.begin(), b.end());
+    //     std::cout << "size: " << a.size() << " capacity " << i << ": " << a.capacity() << std::endl;
+    // }
+
+	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(5);
+	TESTED_NAMESPACE::vector<TESTED_TYPE> vct2;
+	const int cut = 3;
+
+	for (unsigned long int i = 0; i < vct.size(); ++i)
+		vct[i] = (vct.size() - i) * 7;
+	printSize(vct);
+
+	vct2.insert(vct2.begin(), vct.begin(), vct.begin() + cut);
+	printSize(vct2);
+	vct2.insert(vct2.begin(), vct.begin() + cut, vct.end());
+	printSize(vct2);
+	vct2.insert(vct2.end(), vct.begin(), vct.begin() + cut);
+	printSize(vct2);
+
+	std::cout << "insert return:" << std::endl;
+
+	std::cout << *vct2.insert(vct2.end(), 42) << std::endl;
+	std::cout << *vct2.insert(vct2.begin() + 5, 84) << std::endl;
+	std::cout << "----------------------------------------" << std::endl;
+
+	printSize(vct2);
     return 0;
 }

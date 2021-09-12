@@ -23,13 +23,13 @@ OBJS_STD = std.o
 
 all : $(NAME_FT) $(NAME_STD)
 
-$(OBJS_FT) : main.cpp $(HEADER)
+$(OBJS_FT) : $(SRCS) $(HEADER)
 	@$(CC) $(CFLAGS) -I$(INC) -D FT=1 -c $< -o $@
 
 $(NAME_FT) : $(OBJS_FT)
 	@$(CC) $(OBJS_FT) -o $@
 
-$(OBJS_STD) : main.cpp $(HEADER)
+$(OBJS_STD) : $(SRCS) $(HEADER)
 	@$(CC) $(CFLAGS) -I$(INC) -c $< -o $@
 
 $(NAME_STD) : $(OBJS_STD)

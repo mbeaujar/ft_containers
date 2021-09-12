@@ -817,27 +817,42 @@ int main()
     //     std::cout << "size: " << a.size() << " capacity " << i << ": " << a.capacity() << std::endl;
     // }
 
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(5);
+	const int start_size = 7;
+	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(start_size, 20);
 	TESTED_NAMESPACE::vector<TESTED_TYPE> vct2;
-	const int cut = 3;
+	TESTED_NAMESPACE::vector<TESTED_TYPE>::iterator it = vct.begin();
 
-	for (unsigned long int i = 0; i < vct.size(); ++i)
-		vct[i] = (vct.size() - i) * 7;
+	for (int i = 2; i < start_size; ++i)
+		it[i] = (start_size - i) * 3;
 	printSize(vct);
 
-	vct2.insert(vct2.begin(), vct.begin(), vct.begin() + cut);
-	printSize(vct2);
-	vct2.insert(vct2.begin(), vct.begin() + cut, vct.end());
-	printSize(vct2);
-	vct2.insert(vct2.end(), vct.begin(), vct.begin() + cut);
+	vct.resize(10, 42);
+	printSize(vct);
+
+	vct.resize(18, 43);
+	printSize(vct);
+	vct.resize(10);
+	printSize(vct);
+	vct.resize(23, 44);
+	printSize(vct);
+	vct.resize(5);
+	printSize(vct);
+	vct.reserve(5);
+	vct.reserve(3);
+	printSize(vct);
+	vct.resize(87);
+	vct.resize(5);
+	printSize(vct);
+
+	is_empty(vct2);
+	vct2 = vct;
+	is_empty(vct2);
+	vct.reserve(vct.capacity() + 1);
+	printSize(vct);
 	printSize(vct2);
 
-	std::cout << "insert return:" << std::endl;
-
-	std::cout << *vct2.insert(vct2.end(), 42) << std::endl;
-	std::cout << *vct2.insert(vct2.begin() + 5, 84) << std::endl;
-	std::cout << "----------------------------------------" << std::endl;
-
+	vct2.resize(0);
+	is_empty(vct2);
 	printSize(vct2);
     return 0;
 }

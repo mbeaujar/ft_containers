@@ -152,6 +152,12 @@ namespace ft {
 
 	template <typename T>
 	struct enable_if_const<true, T> { typedef const typename T::value_type value_type; };
+
+
+
+	// ------------------------- Allocator::rebind
+
+	template <class Type> struct rebind { typedef allocator<Type> other; };
 };
 
 #endif

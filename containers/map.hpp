@@ -1,4 +1,4 @@
-#ifndef __MAP_HPP__
+	#ifndef __MAP_HPP__
 #define __MAP_HPP__
 
 #include <iostream>
@@ -52,17 +52,13 @@ namespace ft
 			:  _alloc(alloc),
 			   _comp(comp),
 			   _bst()
-		{
-			this->insert(first, last);
-		}
+		{ this->insert(first, last); }
 	
 		map (const map& x)
 			:  _alloc(x._alloc),
 			   _comp(x._comp),
 			   _bst()
-		{
-			this->insert(x.begin(), x.end());
-		}
+		{ this->insert(x.begin(), x.end()); }
 
 		~map() {}
 

@@ -13,18 +13,20 @@ namespace ft
 	public:
 		typedef T value_type;
 		
-		node(value_type const &data, node* left = NULL, node* right = NULL, node* parent = NULL)
+		node(value_type const &data, node* last = NULL, node* left = NULL, node* right = NULL, node* parent = NULL)
 			: data(data),
 			  left(left),
 			  right(right),
-			  parent(parent)
+			  parent(parent),
+			  last(last)
 		{}
 
 		node(node const &copy) 
 			: data(copy.data),
 			  left(copy.left),
 			  right(copy.right),
-			  parent(copy.parent)
+			  parent(copy.parent),
+			  last(copy.last)
 		{}
 
 
@@ -37,6 +39,7 @@ namespace ft
 			left = copy.left;
 			right = copy.right;
 			parent = copy.parent;
+			last = copy.last;
 			return *this;
 		}
 
@@ -44,7 +47,7 @@ namespace ft
 		node* left;
 		node* right;
 		node* parent;
-		bool color; // to have the same size as R-B Tree
+		node* last; // to have the same size as R-B Tree
 	};
 
 	template <typename T, class Compare = ft::less<T>, class Node = node<T>, class Allocator = std::allocator<Node> >
@@ -78,10 +81,14 @@ namespace ft
 			_root = _last;
 		}
 
+		binary_search_trees(binary_search_trees const &x) {}
+
 		~binary_search_trees() {
 			clear();
 			deallocateNode(_last);
 		}
+
+		binary_search_trees operator=(binary_search_trees const &x) {}
 
 		// ---------------------------- Iterators
 

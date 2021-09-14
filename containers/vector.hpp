@@ -47,7 +47,6 @@ namespace ft
 
 		explicit vector(const allocator_type &alloc = allocator_type())
 			: _alloc(alloc),
-			  //_arr(_alloc.allocate(0)),
 			  _arr(0),
 			  _capacity(0),
 			  _current(0)
@@ -58,11 +57,7 @@ namespace ft
 			  _arr(0),
 			  _capacity(0),
 			  _current(0)
-		{
-			this->assign(n, val);
-			// for (pointer it = _arr; n; n--, it++)
-			// 	_alloc.construct(it, val);
-		}
+		{ this->assign(n, val); }
 
 		template <class InputIterator>
 		vector(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type * = 0)
@@ -70,32 +65,15 @@ namespace ft
 			  _arr(0),
 			  _capacity(0),
 			  _current(0)
-		{
-			this->assign(first, last);
-			// size_type n = 0;
-			// for (InputIterator tmp = first; tmp != last; tmp++)
-			// 	n++;
-			// _arr = _alloc.allocate(n);
-			// _capacity = n;
-			// _current = n;
-			// for (pointer it = _arr; first != last; first++, it++)
-			// 	_alloc.construct(it, *first);
-		}
+		{ this->assign(first, last); }
 
 		vector(const vector &x)
-			: _alloc(x._alloc)
+			: _alloc(x._alloc),
+			  _arr(0),
+			  _capacity(0),
+			  _current(0)
 		{
-			typename ft::vector<T>::const_iterator first = x.begin();
-			typename ft::vector<T>::const_iterator last = x.end();
-			typename ft::vector<T>::const_iterator tmp = first;
-			size_type n = 0;
-			for (tmp = first; tmp != last; tmp++)
-				n++;
-			_arr = _alloc.allocate(n);
-			_capacity = n;
-			_current = n;
-			for (pointer it = _arr; first != last; first++, it++)
-				_alloc.construct(it, *first);
+			this->assign(x.begin(), x.end());
 		}
 
 		~vector() {
@@ -106,6 +84,10 @@ namespace ft
 		vector& operator= (const vector& x) {
 			if (this == &x)
 				return *this;
+			if (_capacity > x._capacity) {
+				this->assign(x.begin(), x.end());
+				return *this;
+			}
 			typename ft::vector<T>::const_iterator first = x.begin();
 			typename ft::vector<T>::const_iterator last = x.end();
 			typename ft::vector<T>::const_iterator tmp;
@@ -118,7 +100,7 @@ namespace ft
 			_capacity = n;
 			_current = n;
 			for (pointer it = _arr; first != last; first++, it++)
-				_alloc.construct(it, *first);
+				_alloc.construct(it, *first); 
 			return *this;
 		}
 
@@ -182,13 +164,17 @@ namespace ft
 				return;
 			}
 			if (n > _capacity) {
-				pointer tmp = _alloc.allocate(n);
+				size_type new_capacity = n;
+				size_type curr_capacity = _current; 
+				if (curr_capacity * 2 > n)
+					new_capacity = curr_capacity * 2;
+				pointer tmp = _alloc.allocate(new_capacity);
 				for (l = 0; l < _current; l++)
 					_alloc.construct(tmp + l, _arr[l]);
 				this->clear();
 				_alloc.deallocate(_arr, _capacity);
 				_current = l;
-				_capacity = n;
+				_capacity = new_capacity;
 				_arr = tmp;
 			}
 			for (; l < n; l++)
@@ -209,14 +195,18 @@ namespace ft
 				throw std::length_error("vector::reserve");
 			if (n < _capacity)
 				return;
-			pointer tmp = _alloc.allocate(n);
+			size_type new_capacity = n;
+			size_type curr_capacity = _current; 
+			if (curr_capacity * 2 > n)
+				new_capacity = curr_capacity * 2;
+			pointer tmp = _alloc.allocate(new_capacity);
 			size_type l = 0;
 			for (; l < _current; l++)
 				_alloc.construct(tmp + l, _arr[l]);
 			this->clear();
 			_alloc.deallocate(_arr, _capacity);
 			_arr = tmp;
-			_capacity = n;
+			_capacity = new_capacity;
 			_current = l;
 		}
 
@@ -269,10 +259,14 @@ namespace ft
 			if (n > max_size())
 				throw std::bad_alloc();
 			if (n > _capacity) {
+				size_type new_capacity = n;
+				size_type curr_capacity = _current;
+				if (curr_capacity * 2 > n)
+					new_capacity = curr_capacity * 2;
 				this->clear();
 				_alloc.deallocate(_arr, _capacity);
-				_arr = _alloc.allocate(n);
-				_capacity = n;
+				_arr = _alloc.allocate(new_capacity);
+				_capacity = new_capacity;
 			}
 			else
 				this->clear();
@@ -321,18 +315,10 @@ namespace ft
 		iterator insert (iterator position, const value_type& val) {
  			size_type pos = (&(*position) - _arr);
 			if (_current == _capacity) {
-				size_type new_capacity;
-				size_type tmp_capacity = _capacity * 2;
-				if (_capacity > 10)
-					tmp_capacity = (_capacity * 2) - ((_capacity * 2) % 10);
-				if (_capacity == 0)
-					new_capacity = 1;
-				else if (_current + 1 >= tmp_capacity)
-					new_capacity = _current + 1;
-				else if (_capacity > 10)
-					new_capacity = tmp_capacity + (_capacity % 10);
-				else
-					new_capacity = tmp_capacity;
+				size_type new_capacity = _current + 1;
+				size_type tmp_capacity = _current;
+				if (tmp_capacity * 2 > new_capacity)
+					new_capacity = tmp_capacity * 2;
 				pointer tmp = _alloc.allocate(new_capacity);
 				size_type l = 0;
 				for (; l < pos; l++)
@@ -369,18 +355,10 @@ namespace ft
 			if (n > max_size())
 				throw std::length_error("vector:: M fill insert");
  			if (_current + n > _capacity) { 
-				size_type new_capacity;
-				size_type tmp_capacity = _capacity * 2;
-				if (_capacity > 10)
-					tmp_capacity = (_capacity * 2) - ((_capacity * 2) % 10);
-				if (_capacity == 0)
-					new_capacity = n;
-				else if (_current + n >= tmp_capacity)
-					new_capacity = _current + n;
-				else if (_capacity > 10)
-					new_capacity = tmp_capacity + (_capacity % 10);
-				else
-					new_capacity = tmp_capacity;
+				size_type new_capacity = _current + n;
+				size_type curr_capacity = _current;
+				if (curr_capacity * 2 > new_capacity)
+					new_capacity = curr_capacity * 2;
 				pointer tmp = _alloc.allocate(new_capacity);
 				size_type l = 0;
 				for (; l < pos; l++)
@@ -408,18 +386,10 @@ namespace ft
 			for (InputIterator tmp = first; tmp != last; tmp++)
 				n++;
 			if (_current + n > _capacity) {
-				size_type new_capacity;
-				size_type tmp_capacity = _capacity * 2;
-				if (_capacity > 10)
-					tmp_capacity = (_capacity * 2) - ((_capacity * 2) % 10);
-				if (_capacity == 0)
-					new_capacity = n;
-				else if (_current + n >= tmp_capacity)
-					new_capacity = _current + n;
-				else if (_capacity > 10)
-					new_capacity = tmp_capacity + (_capacity % 10);
-				else
-					new_capacity = tmp_capacity;
+				size_type new_capacity = _current + n;
+				size_type curr_capacity = _current;
+				if (curr_capacity * 2 > new_capacity)
+					new_capacity = curr_capacity * 2;
 				pointer tmp = _alloc.allocate(new_capacity);
 				size_type l = 0;
 				for (; l < pos; l++)

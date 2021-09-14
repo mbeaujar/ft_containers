@@ -44,9 +44,9 @@ namespace ft
 
 			//bidirectional_iterator
 
-			bool operator==(bidirectional_iterator const &rhs) { return _ptr->data == rhs._ptr->data; }
+			bool operator==(bidirectional_iterator const &rhs) { return &_ptr->data.first == &rhs._ptr->data.first; }
 
-			bool operator!=(bidirectional_iterator const &rhs) { return _ptr->data != rhs._ptr->data; }
+			bool operator!=(bidirectional_iterator const &rhs) { return &_ptr->data.first != &rhs._ptr->data.first; }
 
 			value_type& operator*() const { return _ptr->data; }
 

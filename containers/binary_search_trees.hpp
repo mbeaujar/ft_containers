@@ -6,7 +6,7 @@
 #include "iterator.hpp"
 #include "bidirectional_iterator.hpp"
 
-namespace ft 
+namespace ft
 {
 	template <typename T >
 	class node {
@@ -81,14 +81,14 @@ namespace ft
 			_root = _last;
 		}
 
-		binary_search_trees(binary_search_trees const &x) {}
+		binary_search_trees(binary_search_trees const &x) { (void)x; }
 
 		~binary_search_trees() {
 			clear();
 			deallocateNode(_last);
 		}
 
-		binary_search_trees operator=(binary_search_trees const &x) {}
+		binary_search_trees operator=(binary_search_trees const &x) { (void)x; return *this; }
 
 		// ---------------------------- Iterators
 

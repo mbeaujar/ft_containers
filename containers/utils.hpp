@@ -157,7 +157,7 @@ namespace ft {
 
 	// ------------------------- Allocator::rebind
 
-	template <class Type> struct rebind { typedef allocator<Type> other; };
+	template <class Type> struct rebind { typedef std::allocator<Type> other; };
 };
 
 #endif

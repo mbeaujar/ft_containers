@@ -221,7 +221,7 @@ namespace ft
 		allocator_type get_allocator() const { return _bst.get_allocator(); }
 		
 		// debug
-		void printBST() { _bst.printBST(); }
+		// void printBST() { _bst.printBST(); }
 
 	private:
 		allocator_type 										_alloc;
